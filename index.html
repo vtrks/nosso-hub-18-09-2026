@@ -2,8 +2,8 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nosso Hub 💚</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosso Cantinho - Acesso 💚</title>
     <style>
         :root {
             --bg-color: #F4F1EA;
@@ -13,416 +13,112 @@
             --accent-gold: #C5A880;
         }
 
-        html, body {
-            height: 100vh;
-            height: 100dvh;
-            margin: 0;
-            padding: 0;
+        body {
             background-color: var(--bg-color);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            color: var(--text-main);
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-sizing: border-box;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 380px;
-            height: 100%;
-            max-height: 100vh;
-            padding: 6px 16px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            box-sizing: border-box;
-        }
-
-        .header-section {
-            text-align: center;
-            margin-top: 2px;
-        }
-
-        .header-section h1 {
-            font-size: 1.15rem;
-            color: var(--card-bg);
-            margin: 0 0 1px 0;
-        }
-
-        .header-section p {
-            font-size: 0.72rem;
-            color: var(--text-main);
-            opacity: 0.8;
             margin: 0;
-            font-style: italic;
-        }
-
-        .couple-illustration {
-            width: 100%;
-            height: 110px;
-            border-radius: 12px;
-            overflow: hidden;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
+            color: var(--text-main);
             box-sizing: border-box;
-            background-color: transparent;
-            border: 1px solid rgba(197, 168, 128, 0.3);
         }
 
-        .couple-illustration img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            display: block;
-        }
-
-        .counter-card {
+        .lock-card {
             background-color: var(--card-bg);
             color: var(--text-light);
-            padding: 8px 10px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(44, 53, 49, 0.1);
+            padding: 28px 24px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(44, 53, 49, 0.2);
             width: 100%;
+            max-width: 320px;
             text-align: center;
             border: 1px solid var(--accent-gold);
             box-sizing: border-box;
         }
 
-        .counter-card h2 {
-            font-size: 0.68rem;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            margin: 0 0 3px 0;
+        .lock-card h2 {
+            font-size: 1.3rem;
+            margin-top: 0;
             color: var(--accent-gold);
-            font-weight: 500;
+            letter-spacing: 1px;
         }
 
-        .time-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 4px;
-            margin-bottom: 3px;
-        }
-
-        .time-box {
-            background: rgba(255, 255, 255, 0.08);
-            padding: 2px 2px;
-            border-radius: 6px;
-        }
-
-        .time-value {
+        .lock-card p {
             font-size: 0.9rem;
-            font-weight: bold;
-            display: block;
+            opacity: 0.9;
+            margin-bottom: 20px;
         }
 
-        .time-label {
-            font-size: 0.52rem;
-            opacity: 0.85;
-            text-transform: uppercase;
-        }
-
-        .seconds-box {
-            grid-column: span 3;
-            background: rgba(255, 255, 255, 0.08);
-            padding: 2px;
-            border-radius: 6px;
-            font-size: 0.68rem;
-        }
-
-        .seconds-box span {
-            font-weight: bold;
-            color: var(--accent-gold);
-        }
-
-        .nav-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 6px;
+        .lock-card input {
             width: 100%;
-        }
-
-        .nav-card {
-            background-color: white;
-            padding: 6px 8px;
-            border-radius: 10px;
-            text-decoration: none;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: 0 2px 6px rgba(44, 53, 49, 0.05);
-            border: 1px solid rgba(197, 168, 128, 0.3);
-            box-sizing: border-box;
-        }
-
-        .nav-card:active {
-            transform: scale(0.96);
-        }
-
-        .nav-icon {
-            font-size: 0.95rem;
-            background: var(--bg-color);
-            padding: 4px;
-            border-radius: 6px;
-        }
-
-        .nav-info h3 {
-            font-size: 0.75rem;
-            margin: 0 0 1px 0;
-            color: var(--card-bg);
-        }
-
-        .nav-info p {
-            font-size: 0.58rem;
-            margin: 0;
-            opacity: 0.7;
-        }
-        
-        .bottom-bar {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2px;
-            gap: 8px;
-        }
-
-        .logout-btn {
-            background: none;
-            border: 1px solid var(--card-bg);
-            color: var(--card-bg);
-            padding: 5px 10px;
-            border-radius: 6px;
-            font-size: 0.68rem;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .music-player-bar {
-            background-color: var(--card-bg);
+            padding: 14px;
+            border-radius: 12px;
             border: 1px solid var(--accent-gold);
-            border-radius: 8px;
-            padding: 4px 10px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex: 1;
-            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--text-main);
+            font-size: 1.1rem;
+            text-align: center;
+            box-sizing: border-box;
+            margin-bottom: 14px;
+            outline: none;
         }
 
-        .music-player-bar button {
-            background: var(--accent-gold);
+        .lock-card button {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
             border: none;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
+            background-color: var(--accent-gold);
             color: var(--text-main);
             font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
         }
 
-        .music-player-bar span {
-            font-size: 0.65rem;
-            color: var(--text-light);
-            font-weight: 500;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .lock-card button:active {
+            opacity: 0.8;
+        }
+
+        .error-msg {
+            color: #ffb4b4;
+            font-size: 0.8rem;
+            margin-top: 12px;
+            display: none;
         }
     </style>
 </head>
 <body>
 
-    <!-- Arquivo de áudio local apontando para musica.mp3 -->
-    <audio id="bg-audio" loop>
-        <source src="musica.mp3" type="audio/mpeg">
-    </audio>
-
-    <div class="container">
-        <div class="header-section">
-            <h1>Nosso Cantinho 💚</h1>
-            <p>"A gente não precisa tá colado pra tá junto..."</p>
-        </div>
-
-        <div class="couple-illustration">
-            <img src="fotos/casal.jpg" alt="Nosso Cantinho">
-        </div>
-
-        <div class="counter-card">
-            <h2>Juntos há</h2>
-            <div class="time-grid">
-                <div class="time-box">
-                    <span id="years" class="time-value">0</span>
-                    <span class="time-label">Anos</span>
-                </div>
-                <div class="time-box">
-                    <span id="months" class="time-value">0</span>
-                    <span class="time-label">Meses</span>
-                </div>
-                <div class="time-box">
-                    <span id="days" class="time-value">0</span>
-                    <span class="time-label">Dias</span>
-                </div>
-                <div class="time-box">
-                    <span id="hours" class="time-value">0</span>
-                    <span class="time-label">Horas</span>
-                </div>
-                <div class="time-box">
-                    <span id="minutes" class="time-value">0</span>
-                    <span class="time-label">Min</span>
-                </div>
-                <div class="time-box">
-                    <span id="seconds" class="time-value">0</span>
-                    <span class="time-label">Seg</span>
-                </div>
-            </div>
-            <div class="seconds-box">
-                Total de <span id="total-seconds">0</span> segundos 💚
-            </div>
-        </div>
-
-        <div class="nav-grid">
-            <a href="termo.html" class="nav-card">
-                <div class="nav-icon">🔠</div>
-                <div class="nav-info">
-                    <h3>Termo</h3>
-                    <p>Palavra do dia</p>
-                </div>
-            </a>
-
-            <a href="quiz.html" class="nav-card">
-                <div class="nav-icon">🎯</div>
-                <div class="nav-info">
-                    <h3>Quiz</h3>
-                    <p>Nosso amor</p>
-                </div>
-            </a>
-
-            <a href="galeria.html" class="nav-card">
-                <div class="nav-icon">📸</div>
-                <div class="nav-info">
-                    <h3>Galeria</h3>
-                    <p>Memórias</p>
-                </div>
-            </a>
-
-            <a href="recados.html" class="nav-card">
-                <div class="nav-icon">💌</div>
-                <div class="nav-info">
-                    <h3>Recados</h3>
-                    <p>Mural & Pílulas</p>
-                </div>
-            </a>
-        </div>
-
-        <div class="bottom-bar">
-            <button class="logout-btn" onclick="window.location.href='senha.html'">Sair 🔒</button>
-            
-            <div class="music-player-bar">
-                <button id="play-btn" onclick="togglePlay()">▶</button>
-                <span>Luan Santana 🎵</span>
-            </div>
-        </div>
+    <div class="lock-card">
+        <h2>Área Secreta 💚</h2>
+        <p>Digite a senha do nosso cantinho:</p>
+        <form onsubmit="checkPassword(event)">
+            <input type="password" id="password-input" placeholder="Senha" autofocus required autocomplete="off">
+            <button type="submit">Entrar</button>
+            <div id="error-msg" class="error-msg">Senha incorreta, mozão! Tenta de novo.</div>
+        </form>
     </div>
 
     <script>
-        const startDate = new Date(2026, 8, 18, 18, 0, 0);
+        const correctPassword = "1809";
 
-        function updateCounter() {
-            const now = new Date();
-            let diff = now - startDate;
-            if (diff < 0) diff = 0;
+        function checkPassword(event) {
+            event.preventDefault();
+            const input = document.getElementById("password-input").value.trim();
+            const errorMsg = document.getElementById("error-msg");
 
-            let years = now.getFullYear() - startDate.getFullYear();
-            let months = now.getMonth() - startDate.getMonth();
-            let days = now.getDate() - startDate.getDate();
-            let hours = now.getHours() - startDate.getHours();
-            let minutes = now.getMinutes() - startDate.getMinutes();
-            let seconds = now.getSeconds() - startDate.getSeconds();
-
-            if (seconds < 0) { seconds += 60; minutes--; }
-            if (minutes < 0) { minutes += 60; hours--; }
-            if (hours < 0) { hours += 24; days--; }
-            if (days < 0) {
-                const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-                days += prevMonth.getDate();
-                months--;
-            }
-            if (months < 0) { months += 12; years--; }
-
-            const totalSeconds = Math.floor(diff / 1000);
-
-            document.getElementById('years').innerText = years;
-            document.getElementById('months').innerText = months;
-            document.getElementById('days').innerText = days;
-            document.getElementById('hours').innerText = hours;
-            document.getElementById('minutes').innerText = minutes;
-            document.getElementById('seconds').innerText = seconds;
-            document.getElementById('total-seconds').innerText = totalSeconds.toLocaleString('pt-BR');
-        }
-
-        setInterval(updateCounter, 1000);
-        updateCounter();
-
-        // Gerenciamento do Áudio e Persistência
-        const audio = document.getElementById('bg-audio');
-        const playBtn = document.getElementById('play-btn');
-
-        const savedTime = localStorage.getItem('audioCurrentTime');
-        if (savedTime) {
-            audio.currentTime = parseFloat(savedTime);
-        }
-
-        const shouldPlay = localStorage.getItem('audioPlaying') !== 'false';
-
-        if (shouldPlay) {
-            audio.play().then(() => {
-                playBtn.innerText = '⏸';
-                localStorage.setItem('audioPlaying', 'true');
-            }).catch(() => {
-                const unlockAudio = () => {
-                    audio.play().then(() => {
-                        playBtn.innerText = '⏸';
-                        localStorage.setItem('audioPlaying', 'true');
-                        document.removeEventListener('click', unlockAudio);
-                        document.removeEventListener('touchstart', unlockAudio);
-                    });
-                };
-                document.addEventListener('click', unlockAudio);
-                document.addEventListener('touchstart', unlockAudio);
-            });
-        }
-
-        function togglePlay() {
-            if (audio.paused) {
-                audio.play();
-                playBtn.innerText = '⏸';
-                localStorage.setItem('audioPlaying', 'true');
+            if (input === correctPassword) {
+                // Redireciona para o Hub principal
+                window.location.href = "hub.html";
             } else {
-                audio.pause();
-                playBtn.innerText = '▶';
-                localStorage.setItem('audioPlaying', 'false');
+                errorMsg.style.display = "block";
+                document.getElementById("password-input").value = "";
             }
         }
-
-        audio.addEventListener('timeupdate', () => {
-            localStorage.setItem('audioCurrentTime', audio.currentTime);
-        });
-
-        window.addEventListener('beforeunload', () => {
-            localStorage.setItem('audioCurrentTime', audio.currentTime);
-            localStorage.setItem('audioPlaying', !audio.paused);
-        });
     </script>
 </body>
 </html>

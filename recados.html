@@ -329,7 +329,7 @@
         <!-- Parte Superior Totalmente Estática -->
         <div class="fixed-top">
             <div class="header">
-                <a href="index.html" class="back-btn">← Menu</a>
+                <a href="hub.html" class="back-btn">← Menu</a>
                 <h1>Mural de Recados 💌</h1>
                 <div style="width: 45px;"></div>
             </div>
@@ -351,7 +351,7 @@
         <div class="composer-inner">
             <div class="author-selector">
                 <span>Escrevendo como:</span>
-                <button type="button" class="author-btn active" id="btn-paulo" onclick="setAuthor('Paulo')">Paulo 💚</button>
+                <button type="button" class="author-btn" id="btn-paulo" onclick="setAuthor('Paulo')">Paulo 💚</button>
                 <button type="button" class="author-btn" id="btn-ana" onclick="setAuthor('Ana')">Ana 🌸</button>
             </div>
 
@@ -384,13 +384,23 @@
 
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        let currentAuthor = "Paulo";
+        // Recupera o autor salvo no localStorage (padrão é "Paulo" se for a primeira vez)
+        let currentAuthor = localStorage.getItem('preferredAuthor') || 'Paulo';
+
+        // Aplica o estado visual correto do botão logo ao carregar
+        function initAuthorSelection() {
+            document.getElementById('btn-paulo').classList.toggle('active', currentAuthor === 'Paulo');
+            document.getElementById('btn-ana').classList.toggle('active', currentAuthor === 'Ana');
+        }
 
         function setAuthor(author) {
             currentAuthor = author;
+            localStorage.setItem('preferredAuthor', author); // Salva na memória do navegador
             document.getElementById('btn-paulo').classList.toggle('active', author === 'Paulo');
             document.getElementById('btn-ana').classList.toggle('active', author === 'Ana');
         }
+
+        initAuthorSelection();
 
         function addEmoji(emoji) {
             const input = document.getElementById('msg-input');

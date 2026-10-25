@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nosso Hub 💚</title>
+    <style>
+        :root {
+            --bg-color: #F4F1EA;
+            --card-bg: #4A5D4E;
+            --text-main: #2C3531;
+            --text-light: #F4F1EA;
+            --accent-gold: #C5A880;
+        }
+
+        html, body {
+            height: 100vh;
+            height: 100dvh;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text-main);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            height: 100%;
+            max-height: 100vh;
+            padding: 10px 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-top: 2px;
+        }
+
+        .header-section h1 {
+            font-size: 1.3rem;
+            color: var(--card-bg);
+            margin: 0 0 2px 0;
+        }
+
+        .header-section p {
+            font-size: 0.78rem;
+            color: var(--text-main);
+            opacity: 0.85;
+            margin: 0;
+            font-style: italic;
+        }
+
+        /* Foto do casal expandida para ocupar melhor o espaço vertical */
+        .couple-illustration {
+            width: 100%;
+            height: 155px;
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            background-color: transparent;
+            border: 1px solid rgba(197, 168, 128, 0.4);
+            box-shadow: 0 4px 12px rgba(44, 53, 49, 0.08);
+        }
+
+        .couple-illustration img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        /* Contador preenchendo o espaço central */
+        .counter-card {
+            background-color: var(--card-bg);
+            color: var(--text-light);
+            padding: 10px 12px;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(44, 53, 49, 0.12);
+            width: 100%;
+            text-align: center;
+            border: 1px solid var(--accent-gold);
+            box-sizing: border-box;
+        }
+
+        .counter-card h2 {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin: 0 0 4px 0;
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        .time-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin-bottom: 5px;
+        }
+
+        .time-box {
+            background: rgba(255, 255, 255, 0.09);
+            padding: 4px 2px;
+            border-radius: 8px;
+        }
+
+        .time-value {
+            font-size: 1rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .time-label {
+            font-size: 0.55rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+        }
+
+        .seconds-box {
+            grid-column: span 3;
+            background: rgba(255, 255, 255, 0.09);
+            padding: 4px;
+            border-radius: 8px;
+            font-size: 0.72rem;
+        }
+
+        .seconds-box span {
+            font-weight: bold;
+            color: var(--accent-gold);
+        }
+
+        /* Menu de Navegação */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            width: 100%;
+        }
+
+        .nav-card {
+            background-color: white;
+            padding: 10px 12px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 3px 8px rgba(44, 53, 49, 0.06);
+            border: 1px solid rgba(197, 168, 128, 0.35);
+            box-sizing: border-box;
+        }
+
+        .nav-card:active {
+            transform: scale(0.96);
+        }
+
+        .nav-icon {
+            font-size: 1.1rem;
+            background: var(--bg-color);
+            padding: 6px;
+            border-radius: 8px;
+        }
+
+        .nav-info h3 {
+            font-size: 0.82rem;
+            margin: 0 0 2px 0;
+            color: var(--card-bg);
+        }
+
+        .nav-info p {
+            font-size: 0.62rem;
+            margin: 0;
+            opacity: 0.75;
+        }
+        
+        /* Rodapé Seguro */
+        .bottom-bar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+            gap: 10px;
+        }
+
+        .logout-btn {
+            background: none;
+            border: 1px solid var(--card-bg);
+            color: var(--card-bg);
+            padding: 7px 12px;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .music-player-bar {
+            background-color: var(--card-bg);
+            border: 1px solid var(--accent-gold);
+            border-radius: 10px;
+            padding: 6px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            justify-content: space-between;
+        }
+
+        .music-player-bar button {
+            background: var(--accent-gold);
+            border: none;
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: var(--text-main);
+            font-weight: bold;
+        }
+
+        .music-player-bar span {
+            font-size: 0.7rem;
+            color: var(--text-light);
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Arquivo de áudio local apontando para musica.mp3 -->
+    <audio id="bg-audio" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container">
+        <div class="header-section">
+            <h1>Nosso Cantinho 💚</h1>
+            <p>"A gente não precisa tá colado pra tá junto..."</p>
+        </div>
+
+        <div class="couple-illustration">
+            <img src="fotos/casal.jpg" alt="Nosso Cantinho">
+        </div>
+
+        <div class="counter-card">
+            <h2>Juntos há</h2>
+            <div class="time-grid">
+                <div class="time-box">
+                    <span id="years" class="time-value">0</span>
+                    <span class="time-label">Anos</span>
+                </div>
+                <div class="time-box">
+                    <span id="months" class="time-value">0</span>
+                    <span class="time-label">Meses</span>
+                </div>
+                <div class="time-box">
+                    <span id="days" class="time-value">0</span>
+                    <span class="time-label">Dias</span>
+                </div>
+                <div class="time-box">
+                    <span id="hours" class="time-value">0</span>
+                    <span class="time-label">Horas</span>
+                </div>
+                <div class="time-box">
+                    <span id="minutes" class="time-value">0</span>
+                    <span class="time-label">Min</span>
+                </div>
+                <div class="time-box">
+                    <span id="seconds" class="time-value">0</span>
+                    <span class="time-label">Seg</span>
+                </div>
+            </div>
+            <div class="seconds-box">
+                Total de <span id="total-seconds">0</span> segundos 💚
+            </div>
+        </div>
+
+        <div class="nav-grid">
+            <a href="termo.html" class="nav-card">
+                <div class="nav-icon">🔠</div>
+                <div class="nav-info">
+                    <h3>Termo</h3>
+                    <p>Palavra do dia</p>
+                </div>
+            </a>
+
+            <a href="quiz.html" class="nav-card">
+                <div class="nav-icon">🎯</div>
+                <div class="nav-info">
+                    <h3>Quiz</h3>
+                    <p>Nosso amor</p>
+                </div>
+            </a>
+
+            <a href="galeria.html" class="nav-card">
+                <div class="nav-icon">📸</div>
+                <div class="nav-info">
+                    <h3>Galeria</h3>
+                    <p>Memórias</p>
+                </div>
+            </a>
+
+            <a href="recados.html" class="nav-card">
+                <div class="nav-icon">💌</div>
+                <div class="nav-info">
+                    <h3>Recados</h3>
+                    <p>Mural de mensagens</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="bottom-bar">
+            <button class="logout-btn" onclick="window.location.href='senha.html'">Sair 🔒</button>
+            
+            <div class="music-player-bar">
+                <button id="play-btn" onclick="togglePlay()">▶</button>
+                <span>Nossa Música 🎵</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const startDate = new Date(2026, 8, 18, 18, 0, 0);
+
+        function updateCounter() {
+            const now = new Date();
+            let diff = now - startDate;
+            if (diff < 0) diff = 0;
+
+            let years = now.getFullYear() - startDate.getFullYear();
+            let months = now.getMonth() - startDate.getMonth();
+            let days = now.getDate() - startDate.getDate();
+            let hours = now.getHours() - startDate.getHours();
+            let minutes = now.getMinutes() - startDate.getMinutes();
+            let seconds = now.getSeconds() - startDate.getSeconds();
+
+            if (seconds < 0) { seconds += 60; minutes--; }
+            if (minutes < 0) { minutes += 60; hours--; }
+            if (hours < 0) { hours += 24; days--; }
+            if (days < 0) {
+                const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+                days += prevMonth.getDate();
+                months--;
+            }
+            if (months < 0) { months += 12; years--; }
+
+            const totalSeconds = Math.floor(diff / 1000);
+
+            document.getElementById('years').innerText = years;
+            document.getElementById('months').innerText = months;
+            document.getElementById('days').innerText = days;
+            document.getElementById('hours').innerText = hours;
+            document.getElementById('minutes').innerText = minutes;
+            document.getElementById('seconds').innerText = seconds;
+            document.getElementById('total-seconds').innerText = totalSeconds.toLocaleString('pt-BR');
+        }
+
+        setInterval(updateCounter, 1000);
+        updateCounter();
+
+        // Gerenciamento do Áudio e Persistência
+        const audio = document.getElementById('bg-audio');
+        const playBtn = document.getElementById('play-btn');
+
+        const savedTime = localStorage.getItem('audioCurrentTime');
+        if (savedTime) {
+            audio.currentTime = parseFloat(savedTime);
+        }
+
+        const shouldPlay = localStorage.getItem('audioPlaying') !== 'false';
+
+        if (shouldPlay) {
+            audio.play().then(() => {
+                playBtn.innerText = '⏸';
+                localStorage.setItem('audioPlaying', 'true');
+            }).catch(() => {
+                const unlockAudio = () => {
+                    audio.play().then(() => {
+                        playBtn.innerText = '⏸';
+                        localStorage.setItem('audioPlaying', 'true');
+                        document.removeEventListener('click', unlockAudio);
+                        document.removeEventListener('touchstart', unlockAudio);
+                    });
+                };
+                document.addEventListener('click', unlockAudio);
+                document.addEventListener('touchstart', unlockAudio);
+            });
+        }
+
+        function togglePlay() {
+            if (audio.paused) {
+                audio.play();
+                playBtn.innerText = '⏸';
+                localStorage.setItem('audioPlaying', 'true');
+            } else {
+                audio.pause();
+                playBtn.innerText = '▶';
+                localStorage.setItem('audioPlaying', 'false');
+            }
+        }
+
+        audio.addEventListener('timeupdate', () => {
+            localStorage.setItem('audioCurrentTime', audio.currentTime);
+        });
+
+        window.addEventListener('beforeunload', () => {
+            localStorage.setItem('audioCurrentTime', audio.currentTime);
+            localStorage.setItem('audioPlaying', !audio.paused);
+        });
+    </script>
+</body>
+</html>

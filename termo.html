@@ -20,7 +20,7 @@
             height: 100vh;
             height: 100dvh;
             margin: 0;
-            padding: 8px 12px;
+            padding: 10px 14px;
             background-color: var(--bg-color);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             color: var(--text-main);
@@ -34,7 +34,7 @@
 
         .header {
             width: 100%;
-            max-width: 380px;
+            max-width: 420px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -45,48 +45,50 @@
             background-color: var(--card-bg);
             color: var(--text-light);
             border: none;
-            padding: 5px 10px;
+            padding: 6px 12px;
             border-radius: 8px;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             cursor: pointer;
             text-decoration: none;
             font-weight: 500;
         }
 
         h1 {
-            font-size: 1.05rem;
+            font-size: 1.15rem;
             color: var(--card-bg);
             margin: 0;
         }
 
-        /* Grade do Jogo otimizada para celular */
+        /* Grade do Jogo expandida para ocupar a tela */
         .board {
             display: grid;
             grid-template-rows: repeat(6, 1fr);
-            gap: 4px;
-            margin: 4px 0;
+            gap: 6px;
+            margin: 8px 0;
             flex-grow: 1;
             justify-content: center;
             align-content: center;
+            width: 100%;
         }
 
         .row {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 4px;
+            gap: 6px;
+            justify-content: center;
         }
 
         .tile {
-            width: 38px;
-            height: 38px;
+            width: 48px;
+            height: 48px;
             border: 2px solid #d3d6da;
             background-color: white;
-            font-size: 1.1rem;
+            font-size: 1.4rem;
             font-weight: bold;
             display: flex;
             justify-content: center;
             align-items: center;
-            border-radius: 6px;
+            border-radius: 8px;
             text-transform: uppercase;
             color: var(--text-main);
         }
@@ -113,59 +115,59 @@
             border-color: var(--absent-gray);
         }
 
-        /* Container inferior contendo Teclado e Player */
+        /* Seção inferior expandida para preencher o espaço */
         .bottom-section {
             width: 100%;
-            max-width: 380px;
+            max-width: 420px;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
             flex-shrink: 0;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
-        /* Teclado Virtual Compacto */
+        /* Teclado Virtual Maior e Mais Visível */
         .keyboard {
             width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 5px;
         }
 
         .keyboard-row {
             display: flex;
             justify-content: center;
-            gap: 3px;
+            gap: 4px;
         }
 
         .key {
             background-color: #d3d6da;
             border: none;
-            padding: 8px 0;
+            padding: 12px 0;
             flex: 1;
-            border-radius: 5px;
+            border-radius: 6px;
             font-weight: bold;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             cursor: pointer;
             color: var(--text-main);
             text-transform: uppercase;
         }
 
         .key.wide {
-            flex: 1.4;
-            font-size: 0.65rem;
+            flex: 1.5;
+            font-size: 0.7rem;
         }
 
         .key.correct { background-color: var(--correct-green); color: white; }
         .key.present { background-color: var(--present-yellow); color: white; }
         .key.absent { background-color: var(--absent-gray); color: white; }
 
-        /* Mini Player de Música integrado na barra inferior */
+        /* Barra de Música no Rodapé */
         .music-player-bar {
             background-color: var(--card-bg);
             border: 1px solid var(--accent-gold);
-            border-radius: 8px;
-            padding: 4px 10px;
+            border-radius: 10px;
+            padding: 6px 12px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -177,29 +179,29 @@
             background: var(--accent-gold);
             border: none;
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
+            width: 26px;
+            height: 26px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             color: var(--text-main);
             font-weight: bold;
         }
 
         .music-player-bar span {
-            font-size: 0.68rem;
+            font-size: 0.72rem;
             color: var(--text-light);
             font-weight: 500;
         }
 
-        /* Modais */
+        /* Modal de Finalizado / Vitória / Derrota */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             justify-content: center;
             align-items: center;
             z-index: 999;
@@ -210,38 +212,51 @@
         .modal-content {
             background-color: var(--card-bg);
             color: var(--text-light);
-            padding: 20px;
-            border-radius: 16px;
+            padding: 24px;
+            border-radius: 18px;
             width: 100%;
-            max-width: 320px;
+            max-width: 350px;
             text-align: center;
             border: 1px solid var(--accent-gold);
             box-sizing: border-box;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
         .modal-content h2 {
             color: var(--accent-gold);
             margin-top: 0;
-            font-size: 1.1rem;
+            font-size: 1.25rem;
         }
 
         .modal-content p {
-            font-size: 0.8rem;
-            line-height: 1.35;
+            font-size: 0.85rem;
+            line-height: 1.4;
             opacity: 0.95;
-            margin: 6px 0;
+            margin: 8px 0;
         }
 
-        .modal-content button {
+        .countdown-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 10px;
+            margin: 12px 0;
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: var(--accent-gold);
+        }
+
+        .modal-content a, .modal-content button {
             background-color: var(--accent-gold);
             color: var(--text-main);
             border: none;
-            padding: 8px 16px;
+            padding: 10px 20px;
             border-radius: 10px;
             font-weight: bold;
-            margin-top: 10px;
+            margin-top: 12px;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-block;
         }
     </style>
 </head>
@@ -253,9 +268,9 @@
     </audio>
 
     <div class="header">
-        <a href="index.html" class="back-btn">← Menu</a>
+        <a href="hub.html" class="back-btn">← Menu</a>
         <h1>Termo do Amor 🔠</h1>
-        <div style="width: 45px;"></div>
+        <div style="width: 50px;"></div>
     </div>
 
     <!-- Grade (6 x 5) -->
@@ -305,29 +320,25 @@
         <div class="music-player-bar">
             <button id="play-btn" onclick="togglePlay()">▶</button>
             <span>Luan Santana 🎵</span>
-            <div style="width: 24px;"></div>
+            <div style="width: 26px;"></div>
         </div>
     </div>
 
-    <!-- Modal de Vitória -->
-    <div id="win-modal" class="modal">
+    <!-- Modal de Resultado / Fim do Jogo -->
+    <div id="result-modal" class="modal">
         <div class="modal-content">
-            <h2>Acertou, Mozão! 💚</h2>
-            <p id="modal-word" style="font-weight: bold; font-size: 1rem; color: var(--accent-gold);"></p>
+            <h2 id="modal-title">Acertou, Mozão! 💚</h2>
+            <p id="modal-word" style="font-weight: bold; font-size: 1.05rem; color: var(--accent-gold);"></p>
             <p id="modal-def"></p>
-            <p id="modal-etim" style="font-style: italic; font-size: 0.7rem;"></p>
+            <p id="modal-etim" style="font-style: italic; font-size: 0.75rem;"></p>
             <p id="modal-trivia"></p>
-            <button onclick="nextWord()">Próxima Palavra 🔄</button>
-        </div>
-    </div>
+            <p style="margin-top: 10px; font-weight: 500; color: var(--accent-gold);">Volte amanhã para descobrir a próxima palavra! ✨</p>
+            
+            <div class="countdown-box">
+                Próxima palavra em: <span id="countdown-timer">00:00:00</span>
+            </div>
 
-    <!-- Modal de Derrota / Incentivo -->
-    <div id="lose-modal" class="modal">
-        <div class="modal-content">
-            <h2>Quase lá, meu amor! 💚</h2>
-            <p>Não tem problema errar, o importante é a tentativa! O nosso amor foi feito de persistência e carinho.</p>
-            <p id="lose-word-reveal" style="font-weight: bold; color: var(--accent-gold); margin: 8px 0;"></p>
-            <button onclick="resetSameWord()">Tentar de Novo 🔁</button>
+            <a href="hub.html">Voltar ao Menu Principal 🏠</a>
         </div>
     </div>
 
@@ -340,18 +351,36 @@
         let guesses = ['', '', '', '', '', ''];
         let gameOver = false;
 
+        // Data de referência fixa para calcular o dia do jogo sequencial
+        const startDateRef = new Date(2026, 8, 18, 0, 0, 0); // 18/09/2026
+
+        function getDayIndex() {
+            const now = new Date();
+            const diffTime = now.setHours(0,0,0,0) - startDateRef.setHours(0,0,0,0);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays >= 0 ? diffDays : 0;
+        }
+
         async function initGame() {
             try {
                 const response = await fetch('palavras.json');
                 wordsData = await response.json();
 
-                let testIndex = parseInt(localStorage.getItem('testWordIndex') || '0');
-                if (testIndex >= wordsData.length) testIndex = 0;
-                
-                currentWordObj = wordsData[testIndex];
+                // Define o índice baseado no dia atual
+                const dayIndex = getDayIndex() % wordsData.length;
+                currentWordObj = wordsData[dayIndex];
                 targetWord = currentWordObj.palavra.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
 
                 buildBoard();
+
+                // Verifica se o usuário já completou o jogo hoje
+                const lastCompletedDay = localStorage.getItem('termoCompletedDay');
+                const todayStr = new Date().toDateString();
+
+                if (lastCompletedDay === todayStr) {
+                    gameOver = true;
+                    showModal(true); // Mostra direto a tela de finalizado com o contador
+                }
             } catch (error) {
                 console.error("Erro ao carregar palavras.json", error);
             }
@@ -460,10 +489,12 @@
 
             if (matchCount === 5) {
                 gameOver = true;
-                setTimeout(showWinModal, 400);
+                localStorage.setItem('termoCompletedDay', new Date().toDateString());
+                setTimeout(() => showModal(true), 400);
             } else if (currentRow === 5) {
                 gameOver = true;
-                setTimeout(showLoseModal, 400);
+                localStorage.setItem('termoCompletedDay', new Date().toDateString());
+                setTimeout(() => showModal(false), 400);
             } else {
                 currentRow++;
                 currentCol = 0;
@@ -481,38 +512,45 @@
             });
         }
 
-        function showWinModal() {
+        function showModal(isWin) {
+            const titleElem = document.getElementById('modal-title');
+            if (isWin) {
+                titleElem.innerText = "Acertou, Mozão! 💚";
+            } else {
+                titleElem.innerText = "Quase lá, meu amor! 💚";
+            }
+
             document.getElementById('modal-word').innerText = `Palavra: ${currentWordObj.palavra}`;
             document.getElementById('modal-def').innerText = `📖 ${currentWordObj.definicao}`;
             document.getElementById('modal-etim').innerText = `Origem: ${currentWordObj.etimologia}`;
             document.getElementById('modal-trivia').innerText = `💚 ${currentWordObj.curiosidade}`;
-            document.getElementById('win-modal').style.display = 'flex';
-        }
-
-        function showLoseModal() {
-            document.getElementById('lose-word-reveal').innerText = `A palavra secreta era: ${targetWord}`;
-            document.getElementById('lose-modal').style.display = 'flex';
-        }
-
-        function nextWord() {
-            let testIndex = parseInt(localStorage.getItem('testWordIndex') || '0') + 1;
-            localStorage.setItem('testWordIndex', testIndex);
-            location.reload();
-        }
-
-        function resetSameWord() {
-            document.getElementById('lose-modal').style.display = 'none';
-            currentRow = 0;
-            currentCol = 0;
-            guesses = ['', '', '', '', '', ''];
-            gameOver = false;
             
-            document.querySelectorAll('.key').forEach(key => {
-                const label = key.getAttribute('data-key');
-                key.className = label.length > 1 ? 'key wide' : 'key';
-            });
-            
-            buildBoard();
+            document.getElementById('result-modal').style.display = 'flex';
+            startCountdown();
+        }
+
+        function startCountdown() {
+            const timerElem = document.getElementById('countdown-timer');
+
+            function updateTimer() {
+                const now = new Date();
+                const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+                const diff = tomorrow - now;
+
+                if (diff <= 0) {
+                    timerElem.innerText = "00:00:00";
+                    return;
+                }
+
+                const hours = String(Math.floor((diff / (1000 * 60 * 60)) % 24)).padStart(2, '0');
+                const minutes = String(Math.floor((diff / 1000 / 60) % 60)).padStart(2, '0');
+                const seconds = String(Math.floor((diff / 1000) % 60)).padStart(2, '0');
+
+                timerElem.innerText = `${hours}:${minutes}:${seconds}`;
+            }
+
+            updateTimer();
+            setInterval(updateTimer, 1000);
         }
 
         initGame();
