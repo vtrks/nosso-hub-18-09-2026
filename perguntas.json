@@ -1,0 +1,68 @@
+[
+    {
+        "id": 1,
+        "pergunta": "Onde foi o nosso primeiro encontro no início?",
+        "alternativas": [
+            "Italy Caffe",
+            "Bar Quermesse",
+            "Comodoro Burguer"
+        ],
+        "correta": 1,
+        "explicacao": "Foi ali que tudo começou!"
+    },
+    {
+        "id": 2,
+        "pergunta": "Quem costuma demorar mais para responder as mensagens do dia a dia?",
+        "alternativas": [
+            "O Paulo",
+            "A Ana",
+            "Empate técnico absoluto"
+        ],
+        "correta": 0,
+        "explicacao": "É culpa do trabalho... Geralmente..."
+    },
+    {
+        "id": 3,
+        "pergunta": "Como foi que a conversa no Tinder começou?",
+        "alternativas": [
+            "Cantada fofa",
+            "Oi, tudo bem?",
+            "10 dias é muito tempo?"
+        ],
+        "correta": 2,
+        "explicacao": "Fisgou ela na primeira mensagem kkkkk"
+    },
+    {
+        "id": 4,
+        "pergunta": "Qual foi a disculpa pra se ver de novo?",
+        "alternativas": [
+            "Jogo da Copa",
+            "Cinema",
+            "Rolê na feirinha"
+        ],
+        "correta": 0,
+        "explicacao": "Pra segunda, terceira, quarta..."
+    },
+    {
+        "id": 5,
+        "pergunta": "Qual música traduz perfeitamente a nossa sintonia?",
+        "alternativas": [
+            "Crazy Frog - Axel F",
+            "Qualquer uma do BTS",
+            "A que tá tocando"
+        ],
+        "correta": 2,
+        "explicacao": "Fácil né?."
+    },
+    {
+        "id": 6,
+        "pergunta": "Qual presente ele ganhou dela de aniversário em 2026?",
+        "alternativas": [
+            "Um Perfume Árabe",
+            "Uma pulseira especial",
+            "Cueca"
+        ],
+        "correta": 1,
+        "explicacao": "Ele não chorou... por fora."
+    }
+]   

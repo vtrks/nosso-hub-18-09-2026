@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Termo do Amor 🔠</title>
+    <style>
+        :root {
+            --bg-color: #F4F1EA;
+            --card-bg: #4A5D4E;
+            --text-main: #2C3531;
+            --text-light: #F4F1EA;
+            --accent-gold: #C5A880;
+            --correct-green: #6aaa64;
+            --present-yellow: #c9b458;
+            --absent-gray: #787c7e;
+        }
+
+        html, body {
+            height: 100vh;
+            height: 100dvh;
+            margin: 0;
+            padding: 8px 12px;
+            background-color: var(--bg-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text-main);
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        .header {
+            width: 100%;
+            max-width: 380px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .back-btn {
+            background-color: var(--card-bg);
+            color: var(--text-light);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        h1 {
+            font-size: 1.05rem;
+            color: var(--card-bg);
+            margin: 0;
+        }
+
+        /* Grade do Jogo otimizada para celular */
+        .board {
+            display: grid;
+            grid-template-rows: repeat(6, 1fr);
+            gap: 4px;
+            margin: 4px 0;
+            flex-grow: 1;
+            justify-content: center;
+            align-content: center;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+        }
+
+        .tile {
+            width: 38px;
+            height: 38px;
+            border: 2px solid #d3d6da;
+            background-color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 6px;
+            text-transform: uppercase;
+            color: var(--text-main);
+        }
+
+        .tile.filled {
+            border-color: var(--card-bg);
+        }
+
+        .tile.correct {
+            background-color: var(--correct-green);
+            color: white;
+            border-color: var(--correct-green);
+        }
+
+        .tile.present {
+            background-color: var(--present-yellow);
+            color: white;
+            border-color: var(--present-yellow);
+        }
+
+        .tile.absent {
+            background-color: var(--absent-gray);
+            color: white;
+            border-color: var(--absent-gray);
+        }
+
+        /* Container inferior contendo Teclado e Player */
+        .bottom-section {
+            width: 100%;
+            max-width: 380px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-shrink: 0;
+            margin-bottom: 4px;
+        }
+
+        /* Teclado Virtual Compacto */
+        .keyboard {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            gap: 3px;
+        }
+
+        .key {
+            background-color: #d3d6da;
+            border: none;
+            padding: 8px 0;
+            flex: 1;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.75rem;
+            cursor: pointer;
+            color: var(--text-main);
+            text-transform: uppercase;
+        }
+
+        .key.wide {
+            flex: 1.4;
+            font-size: 0.65rem;
+        }
+
+        .key.correct { background-color: var(--correct-green); color: white; }
+        .key.present { background-color: var(--present-yellow); color: white; }
+        .key.absent { background-color: var(--absent-gray); color: white; }
+
+        /* Mini Player de Música integrado na barra inferior */
+        .music-player-bar {
+            background-color: var(--card-bg);
+            border: 1px solid var(--accent-gold);
+            border-radius: 8px;
+            padding: 4px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .music-player-bar button {
+            background: var(--accent-gold);
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            color: var(--text-main);
+            font-weight: bold;
+        }
+
+        .music-player-bar span {
+            font-size: 0.68rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        /* Modais */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            color: var(--text-light);
+            padding: 20px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 320px;
+            text-align: center;
+            border: 1px solid var(--accent-gold);
+            box-sizing: border-box;
+        }
+
+        .modal-content h2 {
+            color: var(--accent-gold);
+            margin-top: 0;
+            font-size: 1.1rem;
+        }
+
+        .modal-content p {
+            font-size: 0.8rem;
+            line-height: 1.35;
+            opacity: 0.95;
+            margin: 6px 0;
+        }
+
+        .modal-content button {
+            background-color: var(--accent-gold);
+            color: var(--text-main);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: bold;
+            margin-top: 10px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Elemento de Áudio Global -->
+    <audio id="bg-audio" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="header">
+        <a href="index.html" class="back-btn">← Menu</a>
+        <h1>Termo do Amor 🔠</h1>
+        <div style="width: 45px;"></div>
+    </div>
+
+    <!-- Grade (6 x 5) -->
+    <div class="board" id="board"></div>
+
+    <!-- Seção Inferior: Teclado + Player de Música -->
+    <div class="bottom-section">
+        <!-- Teclado Virtual -->
+        <div class="keyboard" id="keyboard">
+            <div class="keyboard-row">
+                <button class="key" data-key="Q">Q</button>
+                <button class="key" data-key="W">W</button>
+                <button class="key" data-key="E">E</button>
+                <button class="key" data-key="R">R</button>
+                <button class="key" data-key="T">T</button>
+                <button class="key" data-key="Y">Y</button>
+                <button class="key" data-key="U">U</button>
+                <button class="key" data-key="I">I</button>
+                <button class="key" data-key="O">O</button>
+                <button class="key" data-key="P">P</button>
+            </div>
+            <div class="keyboard-row">
+                <button class="key" data-key="A">A</button>
+                <button class="key" data-key="S">S</button>
+                <button class="key" data-key="D">D</button>
+                <button class="key" data-key="F">F</button>
+                <button class="key" data-key="G">G</button>
+                <button class="key" data-key="H">H</button>
+                <button class="key" data-key="J">J</button>
+                <button class="key" data-key="K">K</button>
+                <button class="key" data-key="L">L</button>
+            </div>
+            <div class="keyboard-row">
+                <button class="key wide" data-key="ENTER">Entrar</button>
+                <button class="key" data-key="Z">Z</button>
+                <button class="key" data-key="X">X</button>
+                <button class="key" data-key="C">C</button>
+                <button class="key" data-key="V">V</button>
+                <button class="key" data-key="B">B</button>
+                <button class="key" data-key="N">N</button>
+                <button class="key" data-key="M">M</button>
+                <button class="key wide" data-key="BACK">⌫</button>
+            </div>
+        </div>
+
+        <!-- Barra de Música no Rodapé -->
+        <div class="music-player-bar">
+            <button id="play-btn" onclick="togglePlay()">▶</button>
+            <span>Luan Santana 🎵</span>
+            <div style="width: 24px;"></div>
+        </div>
+    </div>
+
+    <!-- Modal de Vitória -->
+    <div id="win-modal" class="modal">
+        <div class="modal-content">
+            <h2>Acertou, Mozão! 💚</h2>
+            <p id="modal-word" style="font-weight: bold; font-size: 1rem; color: var(--accent-gold);"></p>
+            <p id="modal-def"></p>
+            <p id="modal-etim" style="font-style: italic; font-size: 0.7rem;"></p>
+            <p id="modal-trivia"></p>
+            <button onclick="nextWord()">Próxima Palavra 🔄</button>
+        </div>
+    </div>
+
+    <!-- Modal de Derrota / Incentivo -->
+    <div id="lose-modal" class="modal">
+        <div class="modal-content">
+            <h2>Quase lá, meu amor! 💚</h2>
+            <p>Não tem problema errar, o importante é a tentativa! O nosso amor foi feito de persistência e carinho.</p>
+            <p id="lose-word-reveal" style="font-weight: bold; color: var(--accent-gold); margin: 8px 0;"></p>
+            <button onclick="resetSameWord()">Tentar de Novo 🔁</button>
+        </div>
+    </div>
+
+    <script>
+        let wordsData = [];
+        let currentWordObj = {};
+        let targetWord = "";
+        let currentRow = 0;
+        let currentCol = 0;
+        let guesses = ['', '', '', '', '', ''];
+        let gameOver = false;
+
+        async function initGame() {
+            try {
+                const response = await fetch('palavras.json');
+                wordsData = await response.json();
+
+                let testIndex = parseInt(localStorage.getItem('testWordIndex') || '0');
+                if (testIndex >= wordsData.length) testIndex = 0;
+                
+                currentWordObj = wordsData[testIndex];
+                targetWord = currentWordObj.palavra.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+
+                buildBoard();
+            } catch (error) {
+                console.error("Erro ao carregar palavras.json", error);
+            }
+        }
+
+        function buildBoard() {
+            const board = document.getElementById('board');
+            board.innerHTML = '';
+            for (let r = 0; r < 6; r++) {
+                const row = document.createElement('div');
+                row.className = 'row';
+                for (let c = 0; c < 5; c++) {
+                    const tile = document.createElement('div');
+                    tile.className = 'tile';
+                    tile.id = `tile-${r}-${c}`;
+                    row.appendChild(tile);
+                }
+                board.appendChild(row);
+            }
+        }
+
+        document.querySelectorAll('.key').forEach(key => {
+            key.addEventListener('click', () => {
+                handleInput(key.getAttribute('data-key'));
+            });
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleInput('ENTER');
+            else if (e.key === 'Backspace') handleInput('BACK');
+            else {
+                const letter = e.key.toUpperCase();
+                if (/^[A-ZÇ]$/.test(letter)) handleInput(letter);
+            }
+        });
+
+        function handleInput(key) {
+            if (gameOver) return;
+
+            if (key === 'BACK') {
+                if (currentCol > 0) {
+                    currentCol--;
+                    guesses[currentRow] = guesses[currentRow].slice(0, -1);
+                    updateTile();
+                }
+            } else if (key === 'ENTER') {
+                if (currentCol === 5) {
+                    checkRow();
+                }
+            } else {
+                if (currentCol < 5) {
+                    guesses[currentRow] += key;
+                    updateTile();
+                    currentCol++;
+                }
+            }
+        }
+
+        function updateTile() {
+            const currentGuess = guesses[currentRow];
+            for (let c = 0; c < 5; c++) {
+                const tile = document.getElementById(`tile-${currentRow}-${c}`);
+                tile.innerText = currentGuess[c] || '';
+                if (currentGuess[c]) {
+                    tile.classList.add('filled');
+                } else {
+                    tile.classList.remove('filled');
+                }
+            }
+        }
+
+        function checkRow() {
+            const guess = guesses[currentRow];
+            const targetChars = targetWord.split('');
+            const guessChars = guess.split('');
+            const rowTiles = [];
+
+            for (let c = 0; c < 5; c++) {
+                rowTiles.push(document.getElementById(`tile-${currentRow}-${c}`));
+            }
+
+            let matchCount = 0;
+            for (let c = 0; c < 5; c++) {
+                if (guessChars[c] === targetChars[c]) {
+                    rowTiles[c].classList.add('correct');
+                    updateKeyColor(guessChars[c], 'correct');
+                    targetChars[c] = null;
+                    guessChars[c] = null;
+                    matchCount++;
+                }
+            }
+
+            for (let c = 0; c < 5; c++) {
+                if (guessChars[c] !== null) {
+                    const index = targetChars.indexOf(guessChars[c]);
+                    if (index > -1) {
+                        rowTiles[c].classList.add('present');
+                        updateKeyColor(guessChars[c], 'present');
+                        targetChars[index] = null;
+                    } else {
+                        rowTiles[c].classList.add('absent');
+                        updateKeyColor(guessChars[c], 'absent');
+                    }
+                }
+            }
+
+            if (matchCount === 5) {
+                gameOver = true;
+                setTimeout(showWinModal, 400);
+            } else if (currentRow === 5) {
+                gameOver = true;
+                setTimeout(showLoseModal, 400);
+            } else {
+                currentRow++;
+                currentCol = 0;
+            }
+        }
+
+        function updateKeyColor(letter, status) {
+            document.querySelectorAll('.key').forEach(key => {
+                if (key.getAttribute('data-key') === letter) {
+                    if (key.classList.contains('correct')) return;
+                    if (key.classList.contains('present') && status === 'absent') return;
+                    key.className = `key ${status}`;
+                    if(key.getAttribute('data-key').length > 1) key.classList.add('wide');
+                }
+            });
+        }
+
+        function showWinModal() {
+            document.getElementById('modal-word').innerText = `Palavra: ${currentWordObj.palavra}`;
+            document.getElementById('modal-def').innerText = `📖 ${currentWordObj.definicao}`;
+            document.getElementById('modal-etim').innerText = `Origem: ${currentWordObj.etimologia}`;
+            document.getElementById('modal-trivia').innerText = `💚 ${currentWordObj.curiosidade}`;
+            document.getElementById('win-modal').style.display = 'flex';
+        }
+
+        function showLoseModal() {
+            document.getElementById('lose-word-reveal').innerText = `A palavra secreta era: ${targetWord}`;
+            document.getElementById('lose-modal').style.display = 'flex';
+        }
+
+        function nextWord() {
+            let testIndex = parseInt(localStorage.getItem('testWordIndex') || '0') + 1;
+            localStorage.setItem('testWordIndex', testIndex);
+            location.reload();
+        }
+
+        function resetSameWord() {
+            document.getElementById('lose-modal').style.display = 'none';
+            currentRow = 0;
+            currentCol = 0;
+            guesses = ['', '', '', '', '', ''];
+            gameOver = false;
+            
+            document.querySelectorAll('.key').forEach(key => {
+                const label = key.getAttribute('data-key');
+                key.className = label.length > 1 ? 'key wide' : 'key';
+            });
+            
+            buildBoard();
+        }
+
+        initGame();
+
+        // Gerenciamento do Áudio e Persistência
+        const audio = document.getElementById('bg-audio');
+        const playBtn = document.getElementById('play-btn');
+
+        const savedTime = localStorage.getItem('audioCurrentTime');
+        if (savedTime) {
+            audio.currentTime = parseFloat(savedTime);
+        }
+
+        const shouldPlay = localStorage.getItem('audioPlaying') !== 'false';
+
+        if (shouldPlay) {
+            audio.play().then(() => {
+                playBtn.innerText = '⏸';
+                localStorage.setItem('audioPlaying', 'true');
+            }).catch(() => {
+                const unlockAudio = () => {
+                    audio.play().then(() => {
+                        playBtn.innerText = '⏸';
+                        localStorage.setItem('audioPlaying', 'true');
+                        document.removeEventListener('click', unlockAudio);
+                        document.removeEventListener('touchstart', unlockAudio);
+                    });
+                };
+                document.addEventListener('click', unlockAudio);
+                document.addEventListener('touchstart', unlockAudio);
+            });
+        }
+
+        function togglePlay() {
+            if (audio.paused) {
+                audio.play();
+                playBtn.innerText = '⏸';
+                localStorage.setItem('audioPlaying', 'true');
+            } else {
+                audio.pause();
+                playBtn.innerText = '▶';
+                localStorage.setItem('audioPlaying', 'false');
+            }
+        }
+
+        audio.addEventListener('timeupdate', () => {
+            localStorage.setItem('audioCurrentTime', audio.currentTime);
+        });
+
+        window.addEventListener('beforeunload', () => {
+            localStorage.setItem('audioCurrentTime', audio.currentTime);
+            localStorage.setItem('audioPlaying', !audio.paused);
+        });
+    </script>
+</body>
+</html>

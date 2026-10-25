@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Quiz do Amor 🎯</title>
+    <style>
+        :root {
+            --bg-color: #F4F1EA;
+            --card-bg: #4A5D4E;
+            --text-main: #2C3531;
+            --text-light: #F4F1EA;
+            --accent-gold: #C5A880;
+            --correct-green: #6aaa64;
+            --incorrect-red: #c95858;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 16px 16px 80px 16px; /* Padding embaixo para o player fixo */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text-main);
+            box-sizing: border-box;
+        }
+
+        .header {
+            width: 100%;
+            max-width: 380px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            background-color: var(--card-bg);
+            color: var(--text-light);
+            border: none;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        h1 {
+            font-size: 1.1rem;
+            color: var(--card-bg);
+            margin: 0;
+        }
+
+        .quiz-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(44, 53, 49, 0.08);
+            width: 100%;
+            max-width: 380px;
+            border: 1px solid rgba(197, 168, 128, 0.4);
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .progress-indicator {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-gold);
+            font-weight: bold;
+        }
+
+        .question-text {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background-color: var(--bg-color);
+            border: 1px solid #d3d6da;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            text-align: left;
+            cursor: pointer;
+            color: var(--text-main);
+            font-weight: 500;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .option-btn:active {
+            transform: scale(0.98);
+        }
+
+        .option-btn.correct {
+            background-color: var(--correct-green);
+            color: white;
+            border-color: var(--correct-green);
+        }
+
+        .option-btn.incorrect {
+            background-color: var(--incorrect-red);
+            color: white;
+            border-color: var(--incorrect-red);
+        }
+
+        .feedback-box {
+            font-size: 0.85rem;
+            margin-top: 5px;
+            font-style: italic;
+            color: var(--card-bg);
+            display: none;
+        }
+
+        .next-btn {
+            background-color: var(--card-bg);
+            color: var(--text-light);
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* Tela de Placar Final */
+        #result-screen {
+            display: none;
+            background-color: var(--card-bg);
+            color: var(--text-light);
+            padding: 24px;
+            border-radius: 18px;
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            border: 1px solid var(--accent-gold);
+            box-sizing: border-box;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        #result-screen h2 {
+            color: var(--accent-gold);
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+        .score-display {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-gold);
+            margin: 5px 0;
+        }
+
+        #result-screen p {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            opacity: 0.95;
+            margin: 0;
+        }
+
+        .restart-btn {
+            background-color: var(--accent-gold);
+            color: var(--text-main);
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 0.95rem;
+        }
+
+        /* Barra Fixa de Música no Rodapé */
+        .bottom-player-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--bg-color);
+            border-top: 1px solid rgba(197, 168, 128, 0.4);
+            padding: 8px 16px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            z-index: 100;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
+        }
+
+        .music-player-inner {
+            width: 100%;
+            max-width: 380px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--accent-gold);
+            border-radius: 10px;
+            padding: 6px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .music-player-inner button {
+            background: var(--accent-gold);
+            border: none;
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: var(--text-main);
+            font-weight: bold;
+        }
+
+        .music-player-inner span {
+            font-size: 0.7rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Elemento de Áudio Global -->
+    <audio id="bg-audio" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="header">
+        <a href="index.html" class="back-btn">← Menu</a>
+        <h1>Quiz do Amor 🎯</h1>
+        <div style="width: 45px;"></div>
+    </div>
+
+    <!-- Card da Pergunta -->
+    <div class="quiz-card" id="quiz-container">
+        <div class="progress-indicator" id="progress">Pergunta 1 de 3</div>
+        <h2 class="question-text" id="question-text">Carregando pergunta...</h2>
+        
+        <div class="options-list" id="options-list">
+            <!-- Alternativas injetadas via JS -->
+        </div>
+
+        <div class="feedback-box" id="feedback"></div>
+        <button class="next-btn" id="next-btn" onclick="nextQuestion()">Próxima Pergunta →</button>
+    </div>
+
+    <!-- Tela de Resultado Final -->
+    <div id="result-screen">
+        <h2>Fim do Quiz! 💚</h2>
+        <div class="score-display" id="final-score">3/3</div>
+        <p id="result-message">Vocês se conhecem demais! É sintonia pura.</p>
+        <button class="restart-btn" onclick="restartQuiz()">Jogar de Novo 🔄</button>
+        <a href="index.html" class="back-btn" style="margin-top: 5px; display: inline-block;">Voltar ao Menu Principal</a>
+    </div>
+
+    <!-- Barra Fixa de Música no Rodapé -->
+    <div class="bottom-player-bar">
+        <div class="music-player-inner">
+            <button id="play-btn" onclick="togglePlay()">▶</button>
+            <span>Luan Santana 🎵</span>
+            <div style="width: 26px;"></div>
+        </div>
+    </div>
+
+    <script>
+        let allQuestions = [];
+        let selectedQuestions = [];
+        let currentIdx = 0;
+        let score = 0;
+        let answered = false;
+
+        async function initQuiz() {
+            try {
+                const response = await fetch('perguntas.json');
+                allQuestions = await response.json();
+                startNewGame();
+            } catch (error) {
+                console.error("Erro ao carregar perguntas.json", error);
+            }
+        }
+
+        function startNewGame() {
+            currentIdx = 0;
+            score = 0;
+            document.getElementById('result-screen').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'flex';
+
+            // Embaralha e pega 3 perguntas aleatórias
+            selectedQuestions = [...allQuestions].sort(() => 0.5 - Math.random()).slice(0, 3);
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false;
+            const q = selectedQuestions[currentIdx];
+            
+            document.getElementById('progress').innerText = `Pergunta ${currentIdx + 1} de 3`;
+            document.getElementById('question-text').innerText = q.pergunta;
+            
+            const optionsList = document.getElementById('options-list');
+            optionsList.innerHTML = '';
+            
+            q.alternativas.forEach((alt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = alt;
+                btn.onclick = () => selectOption(index, btn, q);
+                optionsList.appendChild(btn);
+            });
+
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'none';
+        }
+
+        function selectOption(selectedIndex, selectedBtn, q) {
+            if (answered) return;
+            answered = true;
+
+            const buttons = document.querySelectorAll('.option-btn');
+            const feedbackBox = document.getElementById('feedback');
+
+            if (selectedIndex === q.correta) {
+                selectedBtn.classList.add('correct');
+                score++;
+                feedbackBox.innerText = `✨ Acertou! ${q.explicacao}`;
+            } else {
+                selectedBtn.classList.add('incorrect');
+                buttons[q.correta].classList.add('correct');
+                feedbackBox.innerText = `💡 Errou, mas olha só: ${q.explicacao}`;
+            }
+
+            feedbackBox.style.display = 'block';
+
+            // Desativa todos os botões após responder
+            buttons.forEach(b => b.style.pointerEvents = 'none');
+
+            // Mostra o botão de avançar ou finalizar
+            const nextBtn = document.getElementById('next-btn');
+            if (currentIdx < selectedQuestions.length - 1) {
+                nextBtn.innerText = "Próxima Pergunta →";
+            } else {
+                nextBtn.innerText = "Ver Placar Final 🏆";
+            }
+            nextBtn.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentIdx++;
+            if (currentIdx < selectedQuestions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-container').style.display = 'none';
+            const resultScreen = document.getElementById('result-screen');
+            resultScreen.style.display = 'flex';
+
+            document.getElementById('final-score').innerText = `${score} / 3`;
+
+            let msg = "";
+            if (score === 3) {
+                msg = "Gabarito perfeito! Vocês se conhecem como ninguém, a sintonia é de outro planeta! 💚";
+            } else if (score === 2) {
+                msg = "Muito bem! Vocês têm uma sintonia linda, com direito a pequenas surpresas divertidas. 🥰";
+            } else {
+                msg = "O importante é que o amor é gigante, mesmo que a memória falhe um pouquinho nas curiosidades! 😂💚";
+            }
+            document.getElementById('result-message').innerText = msg;
+        }
+
+        function restartQuiz() {
+            startNewGame();
+        }
+
+        initQuiz();
+
+        // Gerenciamento do Áudio e Persistência
+        const audio = document.getElementById('bg-audio');
+        const playBtn = document.getElementById('play-btn');
+
+        const savedTime = localStorage.getItem('audioCurrentTime');
+        if (savedTime) {
+            audio.currentTime = parseFloat(savedTime);
+        }
+
+        const shouldPlay = localStorage.getItem('audioPlaying') !== 'false';
+
+        if (shouldPlay) {
+            audio.play().then(() => {
+                playBtn.innerText = '⏸';
+                localStorage.setItem('audioPlaying', 'true');
+            }).catch(() => {
+                const unlockAudio = () => {
+                    audio.play().then(() => {
+                        playBtn.innerText = '⏸';
+                        localStorage.setItem('audioPlaying', 'true');
+                        document.removeEventListener('click', unlockAudio);
+                        document.removeEventListener('touchstart', unlockAudio);
+                    });
+                };
+                document.addEventListener('click', unlockAudio);
+                document.addEventListener('touchstart', unlockAudio);
+            });
+        }
+
+        function togglePlay() {
+            if (audio.paused) {
+                audio.play();
+                playBtn.innerText = '⏸';
+                localStorage.setItem('audioPlaying', 'true');
+            } else {
+                audio.pause();
+                playBtn.innerText = '▶';
+                localStorage.setItem('audioPlaying', 'false');
+            }
+        }
+
+        audio.addEventListener('timeupdate', () => {
+            localStorage.setItem('audioCurrentTime', audio.currentTime);
+        });
+
+        window.addEventListener('beforeunload', () => {
+            localStorage.setItem('audioCurrentTime', audio.currentTime);
+            localStorage.setItem('audioPlaying', !audio.paused);
+        });
+    </script>
+</body>
+</html>

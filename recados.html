@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mural de Recados 💌</title>
+    <!-- Importando a biblioteca do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --bg-color: #F4F1EA;
+            --card-bg: #4A5D4E;
+            --text-main: #2C3531;
+            --text-light: #F4F1EA;
+            --accent-gold: #C5A880;
+            --card-paulo: #FFFFFF;
+            --card-ana: #F0EDE5;
+        }
+
+        html, body {
+            height: 100vh;
+            height: 100dvh;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text-main);
+            overflow: hidden; /* Evita que a página inteira role */
+            display: flex;
+            justify-content: center;
+        }
+
+        .layout-wrapper {
+            width: 100%;
+            max-width: 380px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            padding: 12px 16px 0 16px;
+        }
+
+        /* Topo Fixo */
+        .fixed-top {
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background-color: var(--bg-color);
+            padding-bottom: 8px;
+            z-index: 10;
+        }
+
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            background-color: var(--card-bg);
+            color: var(--text-light);
+            border: none;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        h1 {
+            font-size: 1.1rem;
+            color: var(--card-bg);
+            margin: 0;
+        }
+
+        /* Pílula do Dia */
+        .daily-pill-card {
+            background: linear-gradient(135deg, var(--card-bg) 0%, #3B4B3F 100%);
+            color: var(--text-light);
+            padding: 12px 14px;
+            border-radius: 14px;
+            border: 1px solid var(--accent-gold);
+            box-shadow: 0 4px 12px rgba(44, 53, 49, 0.1);
+            text-align: center;
+        }
+
+        .daily-pill-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--accent-gold);
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .daily-pill-text {
+            font-size: 0.82rem;
+            font-style: italic;
+            line-height: 1.35;
+            margin: 0;
+        }
+
+        /* ÁREA DE ROLAGEM EXCLUSIVA DAS MENSAGENS */
+        .scrollable-feed {
+            flex: 1;
+            overflow-y: auto;
+            padding-top: 8px;
+            padding-bottom: 180px; /* Espaço para o composer e o player fixos */
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .note-card {
+            padding: 12px 14px;
+            border-radius: 14px;
+            box-shadow: 0 3px 8px rgba(44, 53, 49, 0.05);
+            max-width: 88%;
+            box-sizing: border-box;
+            line-height: 1.4;
+            font-size: 0.88rem;
+        }
+
+        .note-card.paulo {
+            align-self: flex-start;
+            background-color: var(--card-paulo);
+            border: 1px solid rgba(74, 93, 78, 0.25);
+            border-bottom-left-radius: 4px;
+        }
+
+        .note-card.ana {
+            align-self: flex-end;
+            background-color: var(--card-ana);
+            border: 1px solid rgba(197, 168, 128, 0.4);
+            border-bottom-right-radius: 4px;
+        }
+
+        .note-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+            font-size: 0.7rem;
+            opacity: 0.8;
+            border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+            padding-bottom: 4px;
+        }
+
+        .note-author {
+            font-weight: bold;
+            color: var(--card-bg);
+        }
+
+        .note-text {
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .note-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 6px;
+        }
+
+        .whatsapp-notify-btn {
+            background-color: rgba(74, 93, 78, 0.08);
+            border: 1px solid rgba(74, 93, 78, 0.2);
+            color: var(--card-bg);
+            padding: 3px 6px;
+            border-radius: 6px;
+            font-size: 0.68rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 500;
+        }
+
+        /* Barra Fixa de Envio no Rodapé com o Player Integrado */
+        .composer-box {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--bg-color);
+            border-top: 1px solid rgba(197, 168, 128, 0.3);
+            padding: 8px 16px 12px 16px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            z-index: 100;
+            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .composer-inner {
+            width: 100%;
+            max-width: 380px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .author-selector {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            font-size: 0.7rem;
+        }
+
+        .author-selector span {
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .author-btn {
+            background: white;
+            border: 1px solid rgba(197, 168, 128, 0.5);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            color: var(--text-main);
+        }
+
+        .author-btn.active {
+            background-color: var(--card-bg);
+            color: white;
+            border-color: var(--card-bg);
+            font-weight: bold;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .message-input {
+            flex: 1;
+            padding: 7px 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(197, 168, 128, 0.5);
+            background: white;
+            font-size: 0.85rem;
+            outline: none;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        .send-btn {
+            background-color: var(--card-bg);
+            color: white;
+            border: none;
+            padding: 7px 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 0.82rem;
+            cursor: pointer;
+        }
+
+        .bottom-controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quick-emojis {
+            display: flex;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+
+        .emoji-tag {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .emoji-tag:active {
+            transform: scale(1.2);
+        }
+
+        /* Mini Player de Música na barra inferior */
+        .music-player-mini {
+            background-color: var(--card-bg);
+            border: 1px solid var(--accent-gold);
+            border-radius: 8px;
+            padding: 3px 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .music-player-mini button {
+            background: var(--accent-gold);
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            color: var(--text-main);
+            font-weight: bold;
+        }
+
+        .music-player-mini span {
+            font-size: 0.62rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Elemento de Áudio Global -->
+    <audio id="bg-audio" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="layout-wrapper">
+        <!-- Parte Superior Totalmente Estática -->
+        <div class="fixed-top">
+            <div class="header">
+                <a href="index.html" class="back-btn">← Menu</a>
+                <h1>Mural de Recados 💌</h1>
+                <div style="width: 45px;"></div>
+            </div>
+
+            <div class="daily-pill-card">
+                <div class="daily-pill-title">✨ Pílula de Afeto de Hoje</div>
+                <p class="daily-pill-text">"Mesmo nos dias mais corridos, saber que tenho você deixa tudo mais leve. Tenha um ótimo dia!"</p>
+            </div>
+        </div>
+
+        <!-- Única área que faz Scroll -->
+        <div class="scrollable-feed" id="feed-section">
+            <p style="text-align: center; opacity: 0.6; font-size: 0.85rem;">Carregando recadinhos...</p>
+        </div>
+    </div>
+
+    <!-- Barra Fixa de Envio no Rodapé com o Player Integrado -->
+    <div class="composer-box">
+        <div class="composer-inner">
+            <div class="author-selector">
+                <span>Escrevendo como:</span>
+                <button type="button" class="author-btn active" id="btn-paulo" onclick="setAuthor('Paulo')">Paulo 💚</button>
+                <button type="button" class="author-btn" id="btn-ana" onclick="setAuthor('Ana')">Ana 🌸</button>
+            </div>
+
+            <div class="input-row">
+                <input type="text" id="msg-input" class="message-input" placeholder="Escreva um recadinho fofo..." autocomplete="off">
+                <button type="button" class="send-btn" onclick="postMessage()">Postar</button>
+            </div>
+
+            <div class="bottom-controls-row">
+                <div class="quick-emojis">
+                    <span class="emoji-tag" onclick="addEmoji('💚')">💚</span>
+                    <span class="emoji-tag" onclick="addEmoji('✨')">✨</span>
+                    <span class="emoji-tag" onclick="addEmoji('☕')">☕</span>
+                    <span class="emoji-tag" onclick="addEmoji('💌')">💌</span>
+                    <span class="emoji-tag" onclick="addEmoji('🌸')">🌸</span>
+                    <span class="emoji-tag" onclick="addEmoji('🥰')">🥰</span>
+                </div>
+
+                <div class="music-player-mini">
+                    <button id="play-btn" onclick="togglePlay()">▶</button>
+                    <span>Luan Santana 🎵</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://deaktzeeiquiiucllsuz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlYWt0emVlaXF1aWl1Y2xsc3V6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI4Njg3NDMsImV4cCI6MjEwODQ0NDc0M30.QbdO1ErTt9uDcD9UwNiYOAVZ5lGa3P7_ootV7ixZdnU';
+
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentAuthor = "Paulo";
+
+        function setAuthor(author) {
+            currentAuthor = author;
+            document.getElementById('btn-paulo').classList.toggle('active', author === 'Paulo');
+            document.getElementById('btn-ana').classList.toggle('active', author === 'Ana');
+        }
+
+        function addEmoji(emoji) {
+            const input = document.getElementById('msg-input');
+            input.value += emoji;
+            input.focus();
+        }
+
+        function scrollToBottom() {
+            const feed = document.getElementById('feed-section');
+            feed.scrollTop = feed.scrollHeight;
+        }
+
+        // Buscar mensagens do Supabase
+        async function fetchMessages() {
+            const { data, error } = await _supabase
+                .from('nosso hub')
+                .select('*')
+                .order('criado_em', { ascending: true });
+
+            const feed = document.getElementById('feed-section');
+            feed.innerHTML = '';
+
+            if (error) {
+                console.error('Erro ao buscar recados:', error);
+                feed.innerHTML = '<p style="text-align:center; color:red; font-size:0.8rem;">Erro ao carregar mensagens.</p>';
+                return;
+            }
+
+            if (data.length === 0) {
+                feed.innerHTML = '<p style="text-align: center; opacity: 0.6; font-size: 0.85rem;">Nenhum recadinho ainda. Seja o primeiro a escrever! 💌</p>';
+                return;
+            }
+
+            data.forEach(msg => {
+                renderMessageCard(msg);
+            });
+
+            scrollToBottom();
+        }
+
+        // Postar nova mensagem no Supabase
+        async function postMessage() {
+            const input = document.getElementById('msg-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const { error } = await _supabase
+                .from('nosso hub')
+                .insert([{ autor: currentAuthor, texto: text }]);
+
+            if (error) {
+                alert('Erro ao enviar recado. Verifique os dados do Supabase!');
+                console.error(error);
+                return;
+            }
+
+            input.value = '';
+            await fetchMessages();
+        }
+
+        function renderMessageCard(msg) {
+            const feed = document.getElementById('feed-section');
+            const card = document.createElement('div');
+            const isPaulo = msg.autor === 'Paulo';
+            
+            card.className = `note-card ${isPaulo ? 'paulo' : 'ana'}`;
+            
+            const dateObj = new Date(msg.criado_em);
+            const timeStr = dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + ' às ' + dateObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            const authorTag = isPaulo ? "Paulo 💚" : "Ana 🌸";
+
+            card.innerHTML = `
+                <div class="note-meta">
+                    <span class="note-author">${authorTag}</span>
+                    <span>${timeStr}</span>
+                </div>
+                <p class="note-text">${msg.texto}</p>
+                <div class="note-footer">
+                    <a href="https://wa.me/?text=Te%20deixei%20um%20recadinho%20no%20nosso%20site!%20💚" target="_blank" class="whatsapp-notify-btn">Avisar no Whats 💬</a>
+                </div>
+            `;
+
+            feed.appendChild(card);
+        }
+
+        fetchMessages();
+
+        // Gerenciamento do Áudio e Persistência
+        const audio = document.getElementById('bg-audio');
+        const playBtn = document.getElementById('play-btn');
+
+        const savedTime = localStorage.getItem('audioCurrentTime');
+        if (savedTime) {
+            audio.currentTime = parseFloat(savedTime);
+        }
+
+        const shouldPlay = localStorage.getItem('audioPlaying') !== 'false';
+
+        if (shouldPlay) {
+            audio.play().then(() => {
+                playBtn.innerText = '⏸';
+                localStorage.setItem('audioPlaying', 'true');
+            }).catch(() => {
+                const unlockAudio = () => {
+                    audio.play().then(() => {
+                        playBtn.innerText = '⏸';
+                        localStorage.setItem('audioPlaying', 'true');
+                        document.removeEventListener('click', unlockAudio);
+                        document.removeEventListener('touchstart', unlockAudio);
+                    });
+                };
+                document.addEventListener('click', unlockAudio);
+                document.addEventListener('touchstart', unlockAudio);
+            });
+        }
+
+        function togglePlay() {
+            if (audio.paused) {
+                audio.play();
+                playBtn.innerText = '⏸';
+                localStorage.setItem('audioPlaying', 'true');
+            } else {
+                audio.pause();
+                playBtn.innerText = '▶';
+                localStorage.setItem('audioPlaying', 'false');
+            }
+        }
+
+        audio.addEventListener('timeupdate', () => {
+            localStorage.setItem('audioCurrentTime', audio.currentTime);
+        });
+
+        window.addEventListener('beforeunload', () => {
+            localStorage.setItem('audioCurrentTime', audio.currentTime);
+            localStorage.setItem('audioPlaying', !audio.paused);
+        });
+    </script>
+</body>
+</html>
