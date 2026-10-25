@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Roleta Íntima 🎲🔥</title>
+    <style>
+        :root {
+            --bg-color: #F4F1EA;
+            --card-bg: #4A5D4E;
+            --text-main: #2C3531;
+            --text-light: #F4F1EA;
+            --accent-gold: #C5A880;
+            --spicy-red: #8B3A3A;
+        }
+
+        html, body {
+            height: 100vh;
+            height: 100dvh;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text-main);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Modal de Disclaimer +18 Fofo */
+        #disclaimer-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(44, 53, 49, 0.95);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .disclaimer-card {
+            background-color: var(--card-bg);
+            color: var(--text-light);
+            padding: 28px 22px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid var(--accent-gold);
+            max-width: 320px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .disclaimer-card h2 {
+            color: var(--accent-gold);
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        .disclaimer-card p {
+            font-size: 0.88rem;
+            line-height: 1.4;
+            opacity: 0.95;
+            margin: 0;
+        }
+
+        .disclaimer-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .disclaimer-btn-yes {
+            background-color: var(--accent-gold);
+            color: var(--text-main);
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .disclaimer-btn-no {
+            background: transparent;
+            border: 1px solid rgba(244, 241, 234, 0.4);
+            color: var(--text-light);
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        /* Layout Principal */
+        .layout-wrapper {
+            width: 100%;
+            max-width: 380px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            padding: 12px 16px 0 16px;
+            justify-content: space-between;
+        }
+
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            background-color: var(--card-bg);
+            color: var(--text-light);
+            border: none;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        h1 {
+            font-size: 1.1rem;
+            color: var(--card-bg);
+            margin: 0;
+        }
+
+        /* Seletor de Nível */
+        .level-selector {
+            display: flex;
+            gap: 6px;
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .level-btn {
+            flex: 1;
+            background: white;
+            border: 1px solid rgba(197, 168, 128, 0.5);
+            padding: 8px 4px;
+            border-radius: 10px;
+            font-size: 0.72rem;
+            cursor: pointer;
+            color: var(--text-main);
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .level-btn.active {
+            background-color: var(--card-bg);
+            color: white;
+            border-color: var(--card-bg);
+        }
+
+        /* Card Principal da Roleta */
+        .roulette-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px 18px;
+            box-shadow: 0 6px 20px rgba(44, 53, 49, 0.08);
+            border: 1px solid var(--accent-gold);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin: auto 0;
+            box-sizing: border-box;
+        }
+
+        .roulette-icon {
+            font-size: 2.2rem;
+            margin: 0;
+        }
+
+        .roulette-challenge {
+            font-size: 0.98rem;
+            font-weight: 600;
+            color: var(--text-main);
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        /* Timer Box */
+        .timer-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            background: rgba(197, 168, 128, 0.12);
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid var(--accent-gold);
+        }
+
+        .timer-display {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--card-bg);
+            letter-spacing: 1px;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .timer-btn {
+            background-color: var(--card-bg);
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .spin-btn {
+            background-color: var(--card-bg);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(74, 93, 78, 0.3);
+            transition: transform 0.1s ease;
+        }
+
+        .spin-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* Rodapé com Player */
+        .footer-section {
+            padding-bottom: 16px;
+        }
+
+        .music-player-mini {
+            background-color: var(--card-bg);
+            border: 1px solid var(--accent-gold);
+            border-radius: 10px;
+            padding: 6px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .music-player-mini button {
+            background: var(--accent-gold);
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.68rem;
+            color: var(--text-main);
+            font-weight: bold;
+        }
+
+        .music-player-mini span {
+            font-size: 0.68rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Proteção de Acesso Global -->
+    <script>
+        if (localStorage.getItem('isAuthenticated') !== 'true') {
+            window.location.href = 'index.html';
+        }
+    </script>
+
+    <!-- Modal Disclaimer +18 Fofo -->
+    <div id="disclaimer-modal">
+        <div class="disclaimer-card">
+            <h2>Área Exclusiva 💚🔥</h2>
+            <p>Este cantinho é reservado para momentos só nossos, cheios de carinho e intimidade. Pronto(a) para esquentar as coisas, mozão?</p>
+            <div class="disclaimer-btns">
+                <button class="disclaimer-btn-yes" onclick="acceptDisclaimer()">Sim, vamos lá! 🔥</button>
+                <button class="disclaimer-btn-no" onclick="window.location.href='hub.html'">Voltar ao Menu 🏠</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Elemento de Áudio Global -->
+    <audio id="bg-audio" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="layout-wrapper">
+        <div class="header">
+            <a href="hub.html" class="back-btn">← Menu</a>
+            <h1>Roleta Íntima 🎲🔥</h1>
+            <div style="width: 45px;"></div>
+        </div>
+
+        <!-- Seletor de Níveis -->
+        <div class="level-selector">
+            <button class="level-btn active" onclick="setLevel('leve', this)">✨ Carinho</button>
+            <button class="level-btn" onclick="setLevel('medio', this)">🌡️ Desejo</button>
+            <button class="level-btn" onclick="setLevel('quente', this)">🔥 Fogo Total</button>
+        </div>
+
+        <!-- Card da Sorte / Desafio -->
+        <div class="roulette-card">
+            <div class="roulette-icon" id="roulette-icon">🎁</div>
+            <p class="roulette-challenge" id="roulette-text">Toque no botão abaixo para girar a roleta e descobrir o desafio de vocês!</p>
+            
+            <!-- Timer Integrado -->
+            <div class="timer-container" id="timer-container">
+                <div class="timer-display" id="timer-display">00:00</div>
+                <div class="timer-controls">
+                    <button class="timer-btn" id="timer-toggle-btn" onclick="toggleTimer()">▶ Play</button>
+                    <button class="timer-btn" onclick="resetTimer()" style="background-color: #8b3a3a;">🔄 Reiniciar</button>
+                </div>
+            </div>
+
+            <button class="spin-btn" onclick="spinRoulette()">Girar a Roleta 🎰</button>
+        </div>
+
+        <!-- Rodapé / Player -->
+        <div class="footer-section">
+            <div class="music-player-mini">
+                <button id="play-btn" onclick="togglePlay()">▶</button>
+                <span>Nossa Música 🎵</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let atosData = {};
+        let currentLevel = 'leve';
+        let timerInterval = null;
+        let timeLeft = 0;
+        let totalDuration = 0;
+        let isTimerRunning = false;
+
+        function acceptDisclaimer() {
+            document.getElementById('disclaimer-modal').style.display = 'none';
+        }
+
+        // Carregar o JSON externo
+        async function loadAtos() {
+            try {
+                const response = await fetch('atos.json');
+                atosData = await response.json();
+            } catch (error) {
+                console.error("Erro ao carregar atos.json:", error);
+                document.getElementById('roulette-text').innerText = "Erro ao carregar o arquivo atos.json. Verifique se ele está na mesma pasta!";
+            }
+        }
+
+        loadAtos();
+
+        function setLevel(level, btn) {
+            currentLevel = level;
+            document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            stopTimer();
+            document.getElementById('timer-container').style.display = 'none';
+            document.getElementById('roulette-icon').innerText = level === 'leve' ? '✨' : level === 'medio' ? '🌡️' : '🔥';
+            document.getElementById('roulette-text').innerText = "Nível selecionado! Toque em girar para sortear.";
+        }
+
+        function spinRoulette() {
+            if (!atosData[currentLevel] || atosData[currentLevel].length === 0) {
+                alert("Carregando dados... Tente novamente em um instante.");
+                return;
+            }
+
+            stopTimer();
+            const textElem = document.getElementById('roulette-text');
+            const iconElem = document.getElementById('roulette-icon');
+            const timerContainer = document.getElementById('timer-container');
+            
+            const list = atosData[currentLevel];
+            const randomItem = list[Math.floor(Math.random() * list.length)];
+
+            // Efeito visual de embaralhar
+            textElem.style.opacity = '0.3';
+            iconElem.style.transform = 'rotate(360deg)';
+            iconElem.style.transition = 'transform 0.4s ease';
+
+            setTimeout(() => {
+                iconElem.innerText = randomItem.icone || '🔥';
+                textElem.innerText = randomItem.texto;
+                textElem.style.opacity = '1';
+                iconElem.style.transform = 'rotate(0deg)';
+
+                // Se o desafio exige tempo, gera um tempo ALEATÓRIO separado (entre 60 a 180 segundos / 1 a 3 minutos)
+                if (randomItem.com_tempo) {
+                    const temposPossiveis = [60, 90, 120, 150, 180]; // 1m, 1m30, 2m, 2m30, 3m
+                    totalDuration = temposPossiveis[Math.floor(Math.random() * temposPossiveis.length)];
+                    timeLeft = totalDuration;
+                    updateTimerDisplay();
+                    timerContainer.style.display = 'flex';
+                    document.getElementById('timer-toggle-btn').innerText = "▶ Play";
+                    isTimerRunning = false;
+                } else {
+                    timerContainer.style.display = 'none';
+                }
+            }, 300);
+        }
+
+        // Funções do Temporizador
+        function updateTimerDisplay() {
+            const mins = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+            const secs = String(timeLeft % 60).padStart(2, '0');
+            document.getElementById('timer-display').innerText = `${mins}:${secs}`;
+        }
+
+        function toggleTimer() {
+            const btn = document.getElementById('timer-toggle-btn');
+            if (isTimerRunning) {
+                stopTimer();
+                btn.innerText = "▶ Play";
+            } else {
+                startTimer();
+                btn.innerText = "⏸ Pausar";
+            }
+        }
+
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            isTimerRunning = true;
+            timerInterval = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    updateTimerDisplay();
+                } else {
+                    stopTimer();
+                    playBeep();
+                    document.getElementById('timer-toggle-btn').innerText = "▶ Play";
+                    alert("Tempo esgotado! 🎉🔥");
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            isTimerRunning = false;
+        }
+
+        function resetTimer() {
+            stopTimer();
+            timeLeft = totalDuration;
+            updateTimerDisplay();
+            document.getElementById('timer-toggle-btn').innerText = "▶ Play";
+        }
+
+        // Função para tocar o bipe sonoro nativo do navegador
+        function playBeep() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                oscillator.type = 'sine';
+                oscillator.frequency.value = 880; 
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.6);
+            } catch (e) {
+                console.log("Áudio não suportado automaticamente.");
+            }
+        }
+
+        // Gerenciamento do Áudio Global do Site
+        const audio = document.getElementById('bg-audio');
+        const playBtn = document.getElementById('play-btn');
+
+        const savedTime = localStorage.getItem('audioCurrentTime');
+        if (savedTime) {
+            audio.currentTime = parseFloat(savedTime);
+        }
+
+        const shouldPlay = localStorage.getItem('audioPlaying') !== 'false';
+
+        if (shouldPlay) {
+            audio.play().then(() => {
+                playBtn.innerText = '⏸';
+                localStorage.setItem('audioPlaying', 'true');
+            }).catch(() => {
+                const unlockAudio = () => {
+                    audio.play().then(() => {
+                        playBtn.innerText = '⏸';
+                        localStorage.setItem('audioPlaying', 'true');
+                        document.removeEventListener('click', unlockAudio);
+                        document.removeEventListener('touchstart', unlockAudio);
+                    });
+                };
+                document.addEventListener('click', unlockAudio);
+                document.addEventListener('touchstart', unlockAudio);
+            });
+        }
+
+        function togglePlay() {
+            if (audio.paused) {
+                audio.play();
+                playBtn.innerText = '⏸';
+                localStorage.setItem('audioPlaying', 'true');
+            } else {
+                audio.pause();
+                playBtn.innerText = '▶';
+                localStorage.setItem('audioPlaying', 'false');
+            }
+        }
+
+        audio.addEventListener('timeupdate', () => {
+            localStorage.setItem('audioCurrentTime', audio.currentTime);
+        });
+
+        window.addEventListener('beforeunload', () => {
+            localStorage.setItem('audioCurrentTime', audio.currentTime);
+            localStorage.setItem('audioPlaying', !audio.paused);
+        });
+    </script>
+</body>
+</html>

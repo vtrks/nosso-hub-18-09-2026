@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bucket List do Amor 🗺️</title>
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --bg-color: #F4F1EA;
+            --card-bg: #4A5D4E;
+            --text-main: #2C3531;
+            --text-light: #F4F1EA;
+            --accent-gold: #C5A880;
+            --completed-bg: #E3E8E3;
+            --completed-border: #8FA293;
+        }
+
+        html, body {
+            height: 100vh;
+            height: 100dvh;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text-main);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        .layout-wrapper {
+            width: 100%;
+            max-width: 420px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            padding: 10px 14px 0 14px;
+        }
+
+        /* Topo Fixo */
+        .fixed-top {
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background-color: var(--bg-color);
+            padding-bottom: 6px;
+            z-index: 10;
+        }
+
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            background-color: var(--card-bg);
+            color: var(--text-light);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        h1 {
+            font-size: 1.15rem;
+            color: var(--card-bg);
+            margin: 0;
+        }
+
+        /* Controles: Abas com rolagem lateral livre + Botão fixo */
+        .controls-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 4px;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 2px;
+            flex: 1;
+            scrollbar-width: none;
+            min-width: 0;
+        }
+
+        .category-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-btn {
+            background: white;
+            border: 1px solid rgba(197, 168, 128, 0.4);
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            color: var(--text-main);
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        .tab-btn.active {
+            background-color: var(--card-bg) !important;
+            color: white !important;
+            border-color: var(--card-bg) !important;
+            font-weight: bold;
+        }
+
+        .sort-btn {
+            background-color: white;
+            border: 1px solid var(--accent-gold);
+            color: var(--card-bg);
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* Área de Rolagem Exclusiva dos Cards */
+        .scrollable-list {
+            flex: 1;
+            overflow-y: auto;
+            padding-top: 4px;
+            padding-bottom: 160px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .item-card {
+            background: white;
+            border-radius: 12px;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 6px rgba(44, 53, 49, 0.05);
+            border: 1px solid rgba(197, 168, 128, 0.35);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .item-card:active {
+            transform: scale(0.98);
+        }
+
+        .checkbox {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            border: 2px solid var(--accent-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+            background: white;
+        }
+
+        .item-content {
+            flex: 1;
+        }
+
+        .item-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 0 0 2px 0;
+            color: var(--text-main);
+        }
+
+        .item-meta {
+            font-size: 0.62rem;
+            opacity: 0.7;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        /* Estilo para Itens Concluídos */
+        .section-divider {
+            margin: 16px 0 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.72rem;
+            font-weight: bold;
+            color: var(--card-bg);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(74, 93, 78, 0.2);
+        }
+
+        .item-card.completed {
+            background: var(--completed-bg);
+            border-color: var(--completed-border);
+            opacity: 0.85;
+        }
+
+        .item-card.completed .checkbox {
+            background: var(--card-bg);
+            border-color: var(--card-bg);
+            color: white;
+        }
+
+        .item-card.completed .item-title {
+            text-decoration: line-through;
+            color: #555;
+        }
+
+        /* Barra Fixa de Adição + Player no Rodapé */
+        .composer-box {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--bg-color);
+            border-top: 1px solid rgba(197, 168, 128, 0.3);
+            padding: 8px 16px 12px 16px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            z-index: 100;
+            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .composer-inner {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 6px;
+            width: 100%;
+        }
+
+        .category-select {
+            background: white;
+            border: 1px solid rgba(197, 168, 128, 0.5);
+            border-radius: 10px;
+            padding: 6px 4px;
+            font-size: 0.8rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .item-input {
+            flex: 1;
+            padding: 7px 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(197, 168, 128, 0.5);
+            background: white;
+            font-size: 0.85rem;
+            outline: none;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        .add-btn {
+            background-color: var(--card-bg);
+            color: white;
+            border: none;
+            padding: 7px 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 0.82rem;
+            cursor: pointer;
+        }
+
+        /* Mini Player de Música na barra inferior */
+        .music-player-mini {
+            background-color: var(--card-bg);
+            border: 1px solid var(--accent-gold);
+            border-radius: 10px;
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .music-player-mini button {
+            background: var(--accent-gold);
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.68rem;
+            color: var(--text-main);
+            font-weight: bold;
+        }
+
+        .music-player-mini span {
+            font-size: 0.68rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Proteção de Acesso -->
+    <script>
+        if (localStorage.getItem('isAuthenticated') !== 'true') {
+            window.location.href = 'index.html';
+        }
+    </script>
+
+    <!-- Elemento de Áudio Global -->
+    <audio id="bg-audio" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="layout-wrapper">
+        <!-- Topo Fixo -->
+        <div class="fixed-top">
+            <div class="header">
+                <a href="hub.html" class="back-btn">← Menu</a>
+                <h1>Bucket List do Amor 🗺️</h1>
+                <div style="width: 55px;"></div>
+            </div>
+
+            <!-- Filtros de Categoria com data-category -->
+            <div class="controls-bar">
+                <div class="category-tabs">
+                    <button class="tab-btn active" data-category="todos" onclick="setCategory('todos')">Todos</button>
+                    <button class="tab-btn" data-category="roles" onclick="setCategory('roles')">☕ Rolês</button>
+                    <button class="tab-btn" data-category="viagens" onclick="setCategory('viagens')">✈️ Viagens</button>
+                    <button class="tab-btn" data-category="filmes" onclick="setCategory('filmes')">🍿 Filmes</button>
+                    <button class="tab-btn" data-category="comida" onclick="setCategory('comida')">🍕 Comidinhas</button>
+                </div>
+
+                <button class="sort-btn" id="sort-toggle-btn" onclick="toggleSort()" title="Alternar ordenação por data">
+                    📅 ↓
+                </button>
+            </div>
+        </div>
+
+        <!-- Área de Rolagem Exclusiva dos Cards -->
+        <div class="scrollable-list" id="bucket-list-container">
+            <p style="text-align: center; opacity: 0.6; font-size: 0.85rem; margin-top: 20px;">Carregando nossos desejos...</p>
+        </div>
+    </div>
+
+    <!-- Barra Fixa de Envio no Rodapé com o Player Integrado -->
+    <div class="composer-box">
+        <div class="composer-inner">
+            <div class="input-row">
+                <select id="new-category" class="category-select">
+                    <option value="roles">☕ Rolê</option>
+                    <option value="viagens">✈️ Viagem</option>
+                    <option value="filmes">🍿 Filme</option>
+                    <option value="comida">🍕 Comida</option>
+                </select>
+                
+                <input type="text" id="new-title" class="item-input" placeholder="Adicionar novo desejo ou rolê..." autocomplete="off">
+                <button type="button" class="add-btn" onclick="addItem()">Salvar</button>
+            </div>
+
+            <div class="music-player-mini">
+                <button id="play-btn" onclick="togglePlay()">▶</button>
+                <span>Nossa Música 🎵</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://deaktzeeiquiiucllsuz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlYWt0emVlaXF1aWl1Y2xsc3V6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI4Njg3NDMsImV4cCI6MjEwODQ0NDc0M30.QbdO1ErTt9uDcD9UwNiYOAVZ5lGa3P7_ootV7ixZdnU';
+
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let itemsData = [];
+        let selectedCategory = 'todos';
+        let sortOrder = 'desc';
+
+        const categoryIcons = {
+            roles: '☕',
+            viagens: '✈️',
+            filmes: '🍿',
+            comida: '🍕'
+        };
+
+        async function fetchBucketItems() {
+            const { data, error } = await _supabase
+                .from('bucket_list')
+                .select('*')
+                .order('criado_em', { ascending: false });
+
+            const container = document.getElementById('bucket-list-container');
+
+            if (error) {
+                console.error('Erro ao buscar lista:', error);
+                container.innerHTML = '<p style="text-align: center; color: red; font-size: 0.85rem; margin-top: 20px;">Erro ao carregar lista. Verifique a tabela no Supabase!</p>';
+                return;
+            }
+
+            itemsData = data || [];
+            renderList();
+        }
+
+        function setCategory(cat) {
+            selectedCategory = cat;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-category') === cat);
+            });
+            renderList();
+        }
+
+        function toggleSort() {
+            sortOrder = sortOrder === 'desc' ? 'asc' : 'desc';
+            document.getElementById('sort-toggle-btn').innerText = sortOrder === 'desc' ? '📅 ↓' : '📅 ↑';
+            renderList();
+        }
+
+        async function toggleItem(id, currentStatus) {
+            const currentAuthor = localStorage.getItem('preferredAuthor') || 'Paulo';
+            const newStatus = !currentStatus;
+
+            const updatePayload = {
+                concluido: newStatus,
+                concluido_em: newStatus ? new Date().toISOString() : null,
+                concluido_por: newStatus ? currentAuthor : null
+            };
+
+            const { error } = await _supabase
+                .from('bucket_list')
+                .update(updatePayload)
+                .eq('id', id);
+
+            if (error) {
+                console.error('Erro ao atualizar item:', error);
+                alert('Não foi possível atualizar o item.');
+                return;
+            }
+
+            await fetchBucketItems();
+        }
+
+        async function addItem() {
+            const titleInput = document.getElementById('new-title');
+            const categorySelect = document.getElementById('new-category');
+            const title = titleInput.value.trim();
+
+            if (!title) return;
+
+            const currentAuthor = localStorage.getItem('preferredAuthor') || 'Paulo';
+
+            const { error } = await _supabase
+                .from('bucket_list')
+                .insert([{
+                    titulo: title,
+                    categoria: categorySelect.value,
+                    autor: currentAuthor,
+                    concluido: false
+                }]);
+
+            if (error) {
+                console.error('Erro ao inserir item:', error);
+                alert('Erro ao salvar novo desejo.');
+                return;
+            }
+
+            titleInput.value = '';
+            await fetchBucketItems();
+        }
+
+        function renderList() {
+            const container = document.getElementById('bucket-list-container');
+            container.innerHTML = '';
+
+            let filtered = itemsData.filter(item => selectedCategory === 'todos' || item.categoria === selectedCategory);
+
+            filtered.sort((a, b) => {
+                const dateA = new Date(a.criado_em);
+                const dateB = new Date(b.criado_em);
+                return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
+            });
+
+            const pendingItems = filtered.filter(i => !i.concluido);
+            const completedItems = filtered.filter(i => i.concluido);
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<p style="text-align: center; opacity: 0.6; font-size: 0.85rem; margin-top: 20px;">Nenhum desejo nesta categoria ainda. Adicione um abaixo! ✨</p>';
+                return;
+            }
+
+            pendingItems.forEach(item => {
+                container.appendChild(createCardElement(item));
+            });
+
+            if (completedItems.length > 0) {
+                const divider = document.createElement('div');
+                divider.className = 'section-divider';
+                divider.innerText = `Já Realizados (${completedItems.length}) ✨`;
+                container.appendChild(divider);
+
+                completedItems.forEach(item => {
+                    container.appendChild(createCardElement(item));
+                });
+            }
+        }
+
+        function createCardElement(item) {
+            const card = document.createElement('div');
+            card.className = `item-card ${item.concluido ? 'completed' : ''}`;
+            card.onclick = () => toggleItem(item.id, item.concluido);
+
+            const icon = categoryIcons[item.categoria] || '✨';
+            const dateObj = new Date(item.criado_em);
+            const dateStr = dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+
+            let metaText = `${icon} Criado por ${item.autor} em ${dateStr}`;
+            if (item.concluido && item.concluido_em) {
+                const compDate = new Date(item.concluido_em).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+                metaText = `✅ Concluído por ${item.concluido_por || 'Mozão'} em ${compDate}`;
+            }
+
+            card.innerHTML = `
+                <div class="checkbox">${item.concluido ? '✓' : ''}</div>
+                <div class="item-content">
+                    <p class="item-title">${item.titulo}</p>
+                    <div class="item-meta">${metaText}</div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        fetchBucketItems();
+
+        // Gerenciamento do Áudio e Persistência
+        const audio = document.getElementById('bg-audio');
+        const playBtn = document.getElementById('play-btn');
+
+        const savedTime = localStorage.getItem('audioCurrentTime');
+        if (savedTime) {
+            audio.currentTime = parseFloat(savedTime);
+        }
+
+        const shouldPlay = localStorage.getItem('audioPlaying') !== 'false';
+
+        if (shouldPlay) {
+            audio.play().then(() => {
+                playBtn.innerText = '⏸';
+                localStorage.setItem('audioPlaying', 'true');
+            }).catch(() => {
+                const unlockAudio = () => {
+                    audio.play().then(() => {
+                        playBtn.innerText = '⏸';
+                        localStorage.setItem('audioPlaying', 'true');
+                        document.removeEventListener('click', unlockAudio);
+                        document.removeEventListener('touchstart', unlockAudio);
+                    });
+                };
+                document.addEventListener('click', unlockAudio);
+                document.addEventListener('touchstart', unlockAudio);
+            });
+        }
+
+        function togglePlay() {
+            if (audio.paused) {
+                audio.play();
+                playBtn.innerText = '⏸';
+                localStorage.setItem('audioPlaying', 'true');
+            } else {
+                audio.pause();
+                playBtn.innerText = '▶';
+                localStorage.setItem('audioPlaying', 'false');
+            }
+        }
+
+        audio.addEventListener('timeupdate', () => {
+            localStorage.setItem('audioCurrentTime', audio.currentTime);
+        });
+
+        window.addEventListener('beforeunload', () => {
+            localStorage.setItem('audioCurrentTime', audio.currentTime);
+            localStorage.setItem('audioPlaying', !audio.paused);
+        });
+    </script>
+</body>
+</html>

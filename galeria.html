@@ -223,6 +223,13 @@
 </head>
 <body>
 
+    <!-- Proteção de Acesso -->
+    <script>
+        if (localStorage.getItem('isAuthenticated') !== 'true') {
+            window.location.href = 'index.html';
+        }
+    </script>
+
     <!-- Elemento de Áudio Global -->
     <audio id="bg-audio" loop>
         <source src="musica.mp3" type="audio/mpeg">
@@ -243,8 +250,8 @@
     <div class="bottom-player-bar">
         <div class="music-player-inner">
             <button id="play-btn" onclick="togglePlay()">▶</button>
-            <span>Luan Santana 🎵</span>
-            <div style="width: 28px;"></div> <!-- Elemento invisível para centralizar o texto perfeitamente -->
+            <span>Nossa Música 🎵</span>
+            <div style="width: 28px;"></div>
         </div>
     </div>
 
@@ -266,7 +273,6 @@
     </div>
 
     <script>
-        // Adicione quantas fotos quiser aqui na lista!
         const photos = [
             { src: "fotos/foto1.jpg", caption: "Comendo de graça num rolê bem esquisito." },
             { src: "fotos/foto2.jpg", caption: "Passeando por aí! 😎" },

@@ -33,7 +33,7 @@
             max-width: 420px;
             height: 100%;
             max-height: 100vh;
-            padding: 10px 16px;
+            padding: 8px 16px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -47,23 +47,23 @@
         }
 
         .header-section h1 {
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             color: var(--card-bg);
             margin: 0 0 2px 0;
         }
 
         .header-section p {
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             color: var(--text-main);
             opacity: 0.85;
             margin: 0;
             font-style: italic;
         }
 
-        /* Foto do casal expandida para ocupar melhor o espaço vertical */
+        /* Foto do casal */
         .couple-illustration {
             width: 100%;
-            height: 155px;
+            height: 140px;
             border-radius: 14px;
             overflow: hidden;
             display: flex;
@@ -83,11 +83,11 @@
             display: block;
         }
 
-        /* Contador preenchendo o espaço central */
+        /* Contador */
         .counter-card {
             background-color: var(--card-bg);
             color: var(--text-light);
-            padding: 10px 12px;
+            padding: 8px 10px;
             border-radius: 14px;
             box-shadow: 0 4px 12px rgba(44, 53, 49, 0.12);
             width: 100%;
@@ -97,10 +97,10 @@
         }
 
         .counter-card h2 {
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            margin: 0 0 4px 0;
+            margin: 0 0 3px 0;
             color: var(--accent-gold);
             font-weight: 600;
         }
@@ -108,24 +108,24 @@
         .time-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            margin-bottom: 5px;
+            gap: 5px;
+            margin-bottom: 4px;
         }
 
         .time-box {
             background: rgba(255, 255, 255, 0.09);
-            padding: 4px 2px;
+            padding: 3px 2px;
             border-radius: 8px;
         }
 
         .time-value {
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: bold;
             display: block;
         }
 
         .time-label {
-            font-size: 0.55rem;
+            font-size: 0.52rem;
             opacity: 0.9;
             text-transform: uppercase;
         }
@@ -133,9 +133,9 @@
         .seconds-box {
             grid-column: span 3;
             background: rgba(255, 255, 255, 0.09);
-            padding: 4px;
+            padding: 3px;
             border-radius: 8px;
-            font-size: 0.72rem;
+            font-size: 0.68rem;
         }
 
         .seconds-box span {
@@ -143,59 +143,68 @@
             color: var(--accent-gold);
         }
 
-        /* Menu de Navegação */
+        /* Menu de Navegação ajustado com 6 opções */
         .nav-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
             width: 100%;
         }
 
         .nav-card {
             background-color: white;
-            padding: 10px 12px;
-            border-radius: 12px;
+            padding: 8px 6px;
+            border-radius: 10px;
             text-decoration: none;
             color: var(--text-main);
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 8px;
+            text-align: center;
+            gap: 3px;
             box-shadow: 0 3px 8px rgba(44, 53, 49, 0.06);
             border: 1px solid rgba(197, 168, 128, 0.35);
             box-sizing: border-box;
         }
 
         .nav-card:active {
-            transform: scale(0.96);
+            transform: scale(0.95);
         }
 
         .nav-icon {
-            font-size: 1.1rem;
+            font-size: 1rem;
             background: var(--bg-color);
-            padding: 6px;
-            border-radius: 8px;
+            padding: 4px;
+            border-radius: 6px;
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .nav-info h3 {
-            font-size: 0.82rem;
-            margin: 0 0 2px 0;
+            font-size: 0.72rem;
+            margin: 0;
             color: var(--card-bg);
+            font-weight: bold;
         }
 
         .nav-info p {
-            font-size: 0.62rem;
+            font-size: 0.52rem;
             margin: 0;
             opacity: 0.75;
+            white-space: nowrap;
         }
         
-        /* Rodapé Seguro */
+        /* Rodapé */
         .bottom-bar {
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 4px;
-            gap: 10px;
+            margin-bottom: 2px;
+            gap: 8px;
         }
 
         .logout-btn {
@@ -247,6 +256,19 @@
     </style>
 </head>
 <body>
+
+    <!-- Proteção de Acesso: Redireciona para o login se não autenticado -->
+    <script>
+        if (localStorage.getItem('isAuthenticated') !== 'true') {
+            window.location.href = 'index.html';
+        }
+
+        function logout() {
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('preferredAuthor');
+            window.location.href = 'index.html';
+        }
+    </script>
 
     <!-- Arquivo de áudio local apontando para musica.mp3 -->
     <audio id="bg-audio" loop>
@@ -325,13 +347,29 @@
                 <div class="nav-icon">💌</div>
                 <div class="nav-info">
                     <h3>Recados</h3>
-                    <p>Mural de mensagens</p>
+                    <p>Mensagens</p>
+                </div>
+            </a>
+
+            <a href="bucket.html" class="nav-card">
+                <div class="nav-icon">🗺️</div>
+                <div class="nav-info">
+                    <h3>Bucket</h3>
+                    <p>Nossos planos</p>
+                </div>
+            </a>
+
+            <a href="roleta.html" class="nav-card">
+                <div class="nav-icon">⏳</div>
+                <div class="nav-info">
+                    <h3>Área Secreta</h3>
+                    <p>...</p>
                 </div>
             </a>
         </div>
 
         <div class="bottom-bar">
-            <button class="logout-btn" onclick="window.location.href='senha.html'">Sair 🔒</button>
+            <button class="logout-btn" onclick="logout()">Sair 🔒</button>
             
             <div class="music-player-bar">
                 <button id="play-btn" onclick="togglePlay()">▶</button>

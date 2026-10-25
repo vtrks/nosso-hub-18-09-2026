@@ -104,15 +104,27 @@
     </div>
 
     <script>
-        const correctPassword = "1809";
+        // Strings codificadas em Base64 para as senhas:
+        // '1809mo' (Ana)
+        const ENCODED_ANA = "MTgwOW1v";
+        // '1809admin' (Paulo)
+        const ENCODED_PAULO = "MTgwOWFkbWlu";
 
         function checkPassword(event) {
             event.preventDefault();
             const input = document.getElementById("password-input").value.trim();
             const errorMsg = document.getElementById("error-msg");
 
-            if (input === correctPassword) {
-                // Redireciona para o Hub principal
+            // Codifica o que foi digitado para comparar com o código armazenado
+            const inputEncoded = btoa(input);
+
+            if (inputEncoded === ENCODED_ANA) {
+                localStorage.setItem('isAuthenticated', 'true');
+                localStorage.setItem('preferredAuthor', 'Ana');
+                window.location.href = "hub.html";
+            } else if (inputEncoded === ENCODED_PAULO) {
+                localStorage.setItem('isAuthenticated', 'true');
+                localStorage.setItem('preferredAuthor', 'Paulo');
                 window.location.href = "hub.html";
             } else {
                 errorMsg.style.display = "block";

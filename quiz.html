@@ -242,6 +242,13 @@
 </head>
 <body>
 
+    <!-- Proteção de Acesso -->
+    <script>
+        if (localStorage.getItem('isAuthenticated') !== 'true') {
+            window.location.href = 'index.html';
+        }
+    </script>
+
     <!-- Elemento de Áudio Global -->
     <audio id="bg-audio" loop>
         <source src="musica.mp3" type="audio/mpeg">
@@ -279,7 +286,7 @@
     <div class="bottom-player-bar">
         <div class="music-player-inner">
             <button id="play-btn" onclick="togglePlay()">▶</button>
-            <span>Luan Santana 🎵</span>
+            <span>Nossa Música 🎵</span>
             <div style="width: 26px;"></div>
         </div>
     </div>
@@ -384,9 +391,9 @@
 
             let msg = "";
             if (score === 3) {
-                msg = "Gabarito perfeito! Vocês se conhecem como ninguém, a sintonia é de outro planeta! 💚";
+                msg = "Gabarito perfeito! A gente se conhece como ninguém, a sintonia é de outro planeta! 💚";
             } else if (score === 2) {
-                msg = "Muito bem! Vocês têm uma sintonia linda, com direito a pequenas surpresas divertidas. 🥰";
+                msg = "Muito bem! A gente têm uma sintonia linda, com direito a pequenas surpresas divertidas. 🥰";
             } else {
                 msg = "O importante é que o amor é gigante, mesmo que a memória falhe um pouquinho nas curiosidades! 😂💚";
             }

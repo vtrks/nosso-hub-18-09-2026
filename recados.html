@@ -108,7 +108,7 @@
             flex: 1;
             overflow-y: auto;
             padding-top: 8px;
-            padding-bottom: 180px; /* Espaço para o composer e o player fixos */
+            padding-bottom: 160px; /* Espaço para o composer e o player fixos */
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -202,36 +202,7 @@
             max-width: 380px;
             display: flex;
             flex-direction: column;
-            gap: 5px;
-        }
-
-        .author-selector {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            font-size: 0.7rem;
-        }
-
-        .author-selector span {
-            opacity: 0.8;
-            font-weight: 500;
-        }
-
-        .author-btn {
-            background: white;
-            border: 1px solid rgba(197, 168, 128, 0.5);
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.7rem;
-            cursor: pointer;
-            color: var(--text-main);
-        }
-
-        .author-btn.active {
-            background-color: var(--card-bg);
-            color: white;
-            border-color: var(--card-bg);
-            font-weight: bold;
+            gap: 6px;
         }
 
         .input-row {
@@ -320,6 +291,13 @@
 </head>
 <body>
 
+    <!-- Proteção de Acesso -->
+    <script>
+        if (localStorage.getItem('isAuthenticated') !== 'true') {
+            window.location.href = 'index.html';
+        }
+    </script>
+
     <!-- Elemento de Áudio Global -->
     <audio id="bg-audio" loop>
         <source src="musica.mp3" type="audio/mpeg">
@@ -349,12 +327,6 @@
     <!-- Barra Fixa de Envio no Rodapé com o Player Integrado -->
     <div class="composer-box">
         <div class="composer-inner">
-            <div class="author-selector">
-                <span>Escrevendo como:</span>
-                <button type="button" class="author-btn" id="btn-paulo" onclick="setAuthor('Paulo')">Paulo 💚</button>
-                <button type="button" class="author-btn" id="btn-ana" onclick="setAuthor('Ana')">Ana 🌸</button>
-            </div>
-
             <div class="input-row">
                 <input type="text" id="msg-input" class="message-input" placeholder="Escreva um recadinho fofo..." autocomplete="off">
                 <button type="button" class="send-btn" onclick="postMessage()">Postar</button>
@@ -372,7 +344,7 @@
 
                 <div class="music-player-mini">
                     <button id="play-btn" onclick="togglePlay()">▶</button>
-                    <span>Luan Santana 🎵</span>
+                    <span>Nossa Música 🎵</span>
                 </div>
             </div>
         </div>
@@ -384,23 +356,8 @@
 
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Recupera o autor salvo no localStorage (padrão é "Paulo" se for a primeira vez)
-        let currentAuthor = localStorage.getItem('preferredAuthor') || 'Paulo';
-
-        // Aplica o estado visual correto do botão logo ao carregar
-        function initAuthorSelection() {
-            document.getElementById('btn-paulo').classList.toggle('active', currentAuthor === 'Paulo');
-            document.getElementById('btn-ana').classList.toggle('active', currentAuthor === 'Ana');
-        }
-
-        function setAuthor(author) {
-            currentAuthor = author;
-            localStorage.setItem('preferredAuthor', author); // Salva na memória do navegador
-            document.getElementById('btn-paulo').classList.toggle('active', author === 'Paulo');
-            document.getElementById('btn-ana').classList.toggle('active', author === 'Ana');
-        }
-
-        initAuthorSelection();
+        // Pega automaticamente o autor logado no index.html (Paulo ou Ana)
+        const currentAuthor = localStorage.getItem('preferredAuthor') || 'Paulo';
 
         function addEmoji(emoji) {
             const input = document.getElementById('msg-input');

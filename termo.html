@@ -262,6 +262,13 @@
 </head>
 <body>
 
+    <!-- Proteção de Acesso -->
+    <script>
+        if (localStorage.getItem('isAuthenticated') !== 'true') {
+            window.location.href = 'index.html';
+        }
+    </script>
+
     <!-- Elemento de Áudio Global -->
     <audio id="bg-audio" loop>
         <source src="musica.mp3" type="audio/mpeg">
@@ -319,7 +326,7 @@
         <!-- Barra de Música no Rodapé -->
         <div class="music-player-bar">
             <button id="play-btn" onclick="togglePlay()">▶</button>
-            <span>Luan Santana 🎵</span>
+            <span>Nossa Música 🎵</span>
             <div style="width: 26px;"></div>
         </div>
     </div>
@@ -351,8 +358,7 @@
         let guesses = ['', '', '', '', '', ''];
         let gameOver = false;
 
-        // Data de referência fixa para calcular o dia do jogo sequencial
-        const startDateRef = new Date(2026, 8, 18, 0, 0, 0); // 18/09/2026
+        const startDateRef = new Date(2026, 8, 18, 0, 0, 0);
 
         function getDayIndex() {
             const now = new Date();
@@ -366,20 +372,18 @@
                 const response = await fetch('palavras.json');
                 wordsData = await response.json();
 
-                // Define o índice baseado no dia atual
                 const dayIndex = getDayIndex() % wordsData.length;
                 currentWordObj = wordsData[dayIndex];
                 targetWord = currentWordObj.palavra.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
 
                 buildBoard();
 
-                // Verifica se o usuário já completou o jogo hoje
                 const lastCompletedDay = localStorage.getItem('termoCompletedDay');
                 const todayStr = new Date().toDateString();
 
                 if (lastCompletedDay === todayStr) {
                     gameOver = true;
-                    showModal(true); // Mostra direto a tela de finalizado com o contador
+                    showModal(true);
                 }
             } catch (error) {
                 console.error("Erro ao carregar palavras.json", error);

@@ -1,7 +1,7 @@
 [
     {
         "id": 1,
-        "pergunta": "Onde foi o nosso primeiro encontro no início?",
+        "pergunta": "Onde foi o nosso primeiro encontro?",
         "alternativas": [
             "Italy Caffe",
             "Bar Quermesse",
@@ -64,5 +64,25 @@
         ],
         "correta": 1,
         "explicacao": "Ele não chorou... por fora."
+    },
+    {
+        "id": 7,
+        "pergunta": "Quem falou -te amo- primeiro ?",
+        "alternativas": [
+            "O Paulo",
+            "A Ana"
+        ],
+        "correta": 0,
+        "explicacao": "E nunca mais paramos de dizer!"
+    },
+    {
+        "id": 8,
+        "pergunta": "Quem é mais ciumento (a)?",
+        "alternativas": [
+            "O Paulo",
+            "A Ana"
+        ],
+        "correta": 1,
+        "explicacao": "Traição no sonho, ciúmes de gente que não existe, ..."
     }
 ]   
